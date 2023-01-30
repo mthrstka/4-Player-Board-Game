@@ -1,0 +1,26 @@
+Simple git commands
+
+First, make sure you are in the correct folder
+
+
+-Setup-
+
+git init .                      sets up git at the current directory
+git remote add origin *URL*     adds project to local device
+git status                      shows status, such as current branch, if you have any commits to push, local code differences, etc
+
+
+-Send/Recieve-
+
+git checkout main               Swiches to main branch and sets local files to match the branch (or replace main with any other branch)
+git add .                       Adds the current files to the next commit
+git commit                      Creates a new commit
+git push                        Sends commits to the repository
+git pull                        updates local code to match repository
+
+
+-Branch-
+
+git branch                      lists branches in repository
+git branch *name*               creates branch
+git branch -d *name*            deletes branch, '-d' will only delete branches that does not have unmerged changes, '-D' will delete branch regardless of status
