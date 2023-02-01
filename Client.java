@@ -6,11 +6,15 @@ import java.util.Scanner;
 
 public class Client {
 
-  public static void main(String[] args) throws IOException {
-    Socket socket = new Socket("localhost", 1234);
+  Socket socket;
+  DataInputStream in;
+  DataOutputStream out;
+
+  public void clientSetup() throws IOException {
+    socket = new Socket("199.17.138.13", 1234);
     System.out.println("Connected to Server");
-    DataInputStream in = new DataInputStream(socket.getInputStream());
-    DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+    in = new DataInputStream(socket.getInputStream());
+    out = new DataOutputStream(socket.getOutputStream());
     Scanner scanner = new Scanner(System.in);
 
     while (true) {

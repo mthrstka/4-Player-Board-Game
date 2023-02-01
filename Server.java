@@ -6,13 +6,18 @@ import java.net.Socket;
 
 public class Server {
 
-  public static void main(String[] args) throws IOException {
-    ServerSocket server = new ServerSocket(1234);
+  ServerSocket server;
+  Socket socket;
+  DataInputStream in;
+  DataOutputStream out;
+
+  public void serverSetup() throws IOException {
+    server = new ServerSocket(1234);
     System.out.println("Server Started");
-    Socket socket = server.accept();
+    socket = server.accept();
     System.out.println("Client Connected");
-    DataInputStream in = new DataInputStream(socket.getInputStream());
-    DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+    in = new DataInputStream(socket.getInputStream());
+    out = new DataOutputStream(socket.getOutputStream());
 
     while (true) {
       String message = in.readUTF();
