@@ -3,7 +3,8 @@ import javax.swing.*;
 
 public class GUI extends JFrame {
 
-    GameManagement Listener = new GameManagement(this);
+    GameManagement Listener;
+
     String title = "Onion Board Game";
 
     Boolean isServer = false;
@@ -12,7 +13,9 @@ public class GUI extends JFrame {
     JRadioButton amServerBtn;
     JButton startGame;
 
-    public GUI() {
+    public GUI(GameManagement obj) {
+
+        Listener = obj;
 
         try{
             UIManager.put("Button.background", Color.WHITE);

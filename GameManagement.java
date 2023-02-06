@@ -3,14 +3,15 @@ import java.io.IOException;
 
 public class GameManagement implements ActionListener{
 
-    GUI gui;
-    Server server;
-    Client client;
-    boolean isServer = false;
+    private GUI gui;
+    private Server server;
+    private Client client;
+    private boolean isServer = false;
+    public static int currentTurn;
 
-    public GameManagement(GUI g) {
+    public GameManagement() {
 
-        gui = g;
+        gui = new GUI(this);
         client = new Client();
 
     }
@@ -20,7 +21,6 @@ public class GameManagement implements ActionListener{
         if(e.getSource() == gui.startGame){
             
             try{
-
                 if(gui.amServerBtn.isSelected()){
                     server = new Server();
                     isServer = true;
