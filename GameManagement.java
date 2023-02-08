@@ -9,13 +9,34 @@ public class GameManagement implements ActionListener{
     private Server server;
     private Client client;
     private boolean isServer = false;
-    public static int currentTurn;
+    public static int currentTurn = 1;
+    public int playerTurn = 1;
+    public int roundNum = 1;
+    public int[] playerScores = new int[4];
 
+    
     public GameManagement() {
 
         gui = new GUI(this);
         client = new Client();
 
+    }
+
+    public void nextTurn(){
+
+        currentTurn++;
+        playerTurn++;
+
+        if(playerTurn == 5){
+            playerTurn = 1;
+        }
+
+    }
+
+    public void newRound() {
+        roundNum++;
+        currentTurn = 1;
+        playerTurn = 1;
     }
 
     public static void setArray(int[] Arr) {

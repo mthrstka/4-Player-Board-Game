@@ -2,15 +2,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.UIManager;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 
 public class GUI extends JFrame {
@@ -163,8 +155,8 @@ public class GUI extends JFrame {
         setupMenu.setTitle(title + " - Setup");
         setupMenu.setSize(500, 500);
 
-        JLabel topTxt = new JLabel("Welcome to the " + title);
-        JLabel instructionTxt = new JLabel("Join the game as the:");
+        JLabel topTxt = new JLabel("<html><h1>Welcome to the " + title + "!</h1></html>");
+        JLabel instructionTxt = new JLabel("<html>Join the game as the:<br /><em>(Hover for more info)</em></html>"); // Yes! we can use HTML stuffs!
 
         JPanel p1 = new JPanel();
         JPanel p2 = new JPanel();
@@ -178,8 +170,8 @@ public class GUI extends JFrame {
         ButtonGroup scToggle = new ButtonGroup();
         amServerBtn = new JRadioButton("Host");
         amClientBtn = new JRadioButton("Client");
-        amServerBtn.setToolTipText("Select if you will be hosting the game, only one player should choose this option.");
-        amClientBtn.setToolTipText("Select if you will be joining someone else's game, all players except host should choose this.");
+        amServerBtn.setToolTipText("<html><em>Select if you will be hosting the game, only one player should choose this option.</em></html>");
+        amClientBtn.setToolTipText("<html><em>Select if you will be joining someone else's game, all players except host should choose this.</em></html>");
 
         scToggle.add(amServerBtn);
         scToggle.add(amClientBtn);
