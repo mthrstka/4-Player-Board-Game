@@ -28,6 +28,9 @@ public class GameManagement implements ActionListener{
                     client.clientSetup();
                 } else if(gui.amClientBtn.isSelected()){
                     client.clientSetup();
+                } else{
+                    gui.setupMenu.setVisible(false);
+                    gui.gameHome();
                 }
             }catch(IOException error){
                 System.out.println();
