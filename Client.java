@@ -16,7 +16,7 @@ public class Client {
     in = new DataInputStream(socket.getInputStream());
     out = new DataOutputStream(socket.getOutputStream());
     Scanner scanner = new Scanner(System.in);
-
+    
     while (true) {
       String message = scanner.nextLine();
       if(message.toLowerCase() == "close()") {

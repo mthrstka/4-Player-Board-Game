@@ -1,5 +1,16 @@
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.GridLayout;
+
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.UIManager;
+import javax.swing.SwingConstants;
+
 
 public class GUI extends JFrame {
 
@@ -11,6 +22,7 @@ public class GUI extends JFrame {
     JRadioButton amClientBtn;
     JRadioButton amServerBtn;
     JButton startGame;
+    JFrame setupMenu;
 
     public GUI() {
 
@@ -24,11 +36,117 @@ public class GUI extends JFrame {
         setupMenu();
     }
 
+    public void gameHome(){
+       JFrame gameHome = new JFrame();
+       gameHome.setSize(500,500);
+       gameHome.setDefaultCloseOperation(EXIT_ON_CLOSE);
+       gameHome.setLayout(new GridLayout(6,6));
+
+       JLabel lblPlayer1 = new JLabel("Player 1:");
+       gameHome.add(lblPlayer1);
+
+       JLabel p1 = new JLabel("      P1");
+       p1.setVerticalAlignment(SwingConstants.BOTTOM);
+       gameHome.add(p1);
+
+       JLabel p2 = new JLabel("      P2");
+       p2.setVerticalAlignment(SwingConstants.BOTTOM);
+       gameHome.add(p2);
+
+       JLabel p3 = new JLabel("      P3");
+       p3.setVerticalAlignment(SwingConstants.BOTTOM);
+       gameHome.add(p3);
+
+       JLabel p4 = new JLabel("      P4");
+       p4.setVerticalAlignment(SwingConstants.BOTTOM);
+       gameHome.add(p4);
+
+      
+       JLabel lblPlayer2 = new JLabel("Player 2:");
+       gameHome.add(lblPlayer2);
+
+       gameHome.add(new JLabel("P1  ", SwingConstants.RIGHT));
+
+        ImageIcon img = new ImageIcon("black_dot.png");
+
+       JLabel one = new JLabel(img);
+       JLabel two = new JLabel(img);
+       JLabel three = new JLabel(img);
+       JLabel four = new JLabel(img);
+
+       gameHome.add(one);
+       gameHome.add(two);
+       gameHome.add(three);
+       gameHome.add(four);
+
+       gameHome.add(new JLabel(""));
+
+       gameHome.add(new JLabel("P2  ", SwingConstants.RIGHT));
+
+       JLabel five = new JLabel(img);
+       JLabel six = new JLabel(img);
+       JLabel seven = new JLabel(img);
+       JLabel eight = new JLabel(img);
+
+       gameHome.add(five);
+       gameHome.add(six);
+       gameHome.add(seven);
+       gameHome.add(eight);
+
+       gameHome.add(new JLabel(""));
+
+       gameHome.add(new JLabel("P3  ", SwingConstants.RIGHT));
+
+       JLabel nine = new JLabel(img);
+       JLabel ten = new JLabel(img);
+       JLabel eleven = new JLabel(img);
+       JLabel twelve = new JLabel(img);
+
+       gameHome.add(nine);
+       gameHome.add(ten);
+       gameHome.add(eleven);
+       gameHome.add(twelve);
+
+       gameHome.add(new JLabel(""));
+
+       gameHome.add(new JLabel("P4  ", SwingConstants.RIGHT));
+
+       JLabel thirteen = new JLabel(img);
+       JLabel fourteen = new JLabel(img);
+       JLabel fifteen = new JLabel(img);
+       JLabel sixteen = new JLabel(img);
+
+       gameHome.add(thirteen);
+       gameHome.add(fourteen);
+       gameHome.add(fifteen);
+       gameHome.add(sixteen);
+
+       gameHome.add(new JLabel(""));
+
+       JLabel lblPlayer3 = new JLabel("Player 3:");
+       gameHome.add(lblPlayer3);
+
+       gameHome.add(new JLabel(""));
+       gameHome.add(new JLabel(""));
+       gameHome.add(new JLabel(""));
+       gameHome.add(new JLabel(""));
+
+       JLabel lblPlayer4 = new JLabel("Player 4:");
+       gameHome.add(lblPlayer4);
+
+       gameHome.setVisible(true);
+
+    }
+        
+        
+
+    
+
     public void setupMenu() {
 
-        JFrame setupMenu = new JFrame();
+        setupMenu = new JFrame();
         setupMenu.setLayout(new GridLayout(4, 1));
-
+        setupMenu.setDefaultCloseOperation(EXIT_ON_CLOSE);
         setupMenu.setTitle(title + " - Setup");
         setupMenu.setSize(500, 500);
 
