@@ -1,17 +1,42 @@
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class GameManagement implements ActionListener{
 
-    GUI gui;
+    private GUI gui;
+    private Server server;
+    private Client client;
+    private boolean isServer = false;
+    public static int currentTurn;
 
-    public GameManagement(GUI g) {
+    public GameManagement() {
 
-        gui = g;
+        gui = new GUI(this);
+        client = new Client();
 
     }
 
     public void actionPerformed(ActionEvent e) {
         
+        if(e.getSource() == gui.startGame){
+            
+            try{
+                if(gui.amServerBtn.isSelected()){
+                    server = new Server();
+                    isServer = true;
+                    server.serverSetup();
+                    client.clientSetup();
+                } else if(gui.amClientBtn.isSelected()){
+                    client.clientSetup();
+                } else{
+                    gui.setupMenu.setVisible(false);
+                    gui.gameHome();
+                }
+            }catch(IOException error){
+                System.out.println();
+            } 
+        }
     }
     
 }
