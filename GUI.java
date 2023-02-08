@@ -30,10 +30,20 @@ public class GUI extends JFrame {
 
         Listener = obj;
 
-        try{
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        try{    // Sets the style to that of the native system
+
+            String os = System.getProperty("os.name");
+            if(os.toLowerCase().contains("windows"))
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            else if(os.toLowerCase().contains("mac"))
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+            else if(os.toLowerCase().contains("linux"))
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+            else
+                throw new ClassNotFoundException("Did not recognise reported OS (" + os + ")");
+
         } catch (Exception e){
-            System.out.println("Could not set native look and feel");
+            System.out.println("Could not set native look and feel - " + e.getMessage());
             UIManager.put("Button.background", Color.WHITE);
             UIManager.put("ToolTip.background", Color.WHITE);
         }
@@ -47,6 +57,7 @@ public class GUI extends JFrame {
        gameHome.setSize(500,500);
        gameHome.setDefaultCloseOperation(EXIT_ON_CLOSE);
        gameHome.setLayout(new GridLayout(6,6));
+       gameHome.setTitle(title);
 
        JLabel lblPlayer1 = new JLabel("Player 1:", SwingConstants.CENTER);         //lbl for Player1 Score
        gameHome.add(lblPlayer1);
