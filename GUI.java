@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.GridLayout;
-
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -40,16 +39,17 @@ public class GUI extends JFrame {
     }
 
     public void gameHome(){
+
        JFrame gameHome = new JFrame();
        gameHome.setSize(500,500);
        gameHome.setDefaultCloseOperation(EXIT_ON_CLOSE);
        gameHome.setLayout(new GridLayout(6,6));
 
-       JLabel lblPlayer1 = new JLabel("Player 1:");
+       JLabel lblPlayer1 = new JLabel("Player 1:", SwingConstants.CENTER);         //lbl for Player1 Score
        gameHome.add(lblPlayer1);
 
-       JLabel p1 = new JLabel("      P1");
-       p1.setVerticalAlignment(SwingConstants.BOTTOM);
+       JLabel p1 = new JLabel("      P1");                  //Column header for game board
+       p1.setVerticalAlignment(SwingConstants.BOTTOM);      //Set the position of the text to the bottom
        gameHome.add(p1);
 
        JLabel p2 = new JLabel("      P2");
@@ -65,13 +65,14 @@ public class GUI extends JFrame {
        gameHome.add(p4);
 
       
-       JLabel lblPlayer2 = new JLabel("Player 2:");
+       JLabel lblPlayer2 = new JLabel("Player 2:", SwingConstants.CENTER);         //lbl for Player2 Score
        gameHome.add(lblPlayer2);
 
-       gameHome.add(new JLabel("P1  ", SwingConstants.RIGHT));
+       gameHome.add(new JLabel("P1  ", SwingConstants.RIGHT));  //Row label with text postitioned to right
+       ImageIcon img = new ImageIcon("black_dot.png");      //Black dot Image 
 
-        ImageIcon img = new ImageIcon("black_dot.png");
 
+       /////JLabel's one through sixteen represents each cell on the game board\\\\\ 
        JLabel one = new JLabel(img);
        JLabel two = new JLabel(img);
        JLabel three = new JLabel(img);
@@ -83,7 +84,6 @@ public class GUI extends JFrame {
        gameHome.add(four);
 
        gameHome.add(new JLabel(""));
-
        gameHome.add(new JLabel("P2  ", SwingConstants.RIGHT));
 
        JLabel five = new JLabel(img);
@@ -97,7 +97,6 @@ public class GUI extends JFrame {
        gameHome.add(eight);
 
        gameHome.add(new JLabel(""));
-
        gameHome.add(new JLabel("P3  ", SwingConstants.RIGHT));
 
        JLabel nine = new JLabel(img);
@@ -111,7 +110,6 @@ public class GUI extends JFrame {
        gameHome.add(twelve);
 
        gameHome.add(new JLabel(""));
-
        gameHome.add(new JLabel("P4  ", SwingConstants.RIGHT));
 
        JLabel thirteen = new JLabel(img);
@@ -125,18 +123,16 @@ public class GUI extends JFrame {
        gameHome.add(sixteen);
 
        gameHome.add(new JLabel(""));
-
-       JLabel lblPlayer3 = new JLabel("Player 3:");
+       JLabel lblPlayer3 = new JLabel("Player 3:", SwingConstants.CENTER);     //lbl for Player3 score
        gameHome.add(lblPlayer3);
 
-       gameHome.add(new JLabel(""));
+       gameHome.add(new JLabel(""));            //empty Jlabels along the bottom of the GUI
        gameHome.add(new JLabel(""));
        gameHome.add(new JLabel(""));
        gameHome.add(new JLabel(""));
 
-       JLabel lblPlayer4 = new JLabel("Player 4:");
+       JLabel lblPlayer4 = new JLabel("Player 4:", SwingConstants.CENTER);    //lbl for Player 4 score
        gameHome.add(lblPlayer4);
-
        gameHome.setVisible(true);
 
     }
