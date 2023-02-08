@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -29,10 +31,11 @@ public class GUI extends JFrame {
         Listener = obj;
 
         try{
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e){
+            System.out.println("Could not set native look and feel");
             UIManager.put("Button.background", Color.WHITE);
             UIManager.put("ToolTip.background", Color.WHITE);
-        } catch (Exception e){
-            System.out.println("Something broke");
         }
 
         setupMenu();
@@ -144,7 +147,7 @@ public class GUI extends JFrame {
     public void setupMenu() {
 
         setupMenu = new JFrame();
-        setupMenu.setLayout(new GridLayout(4, 1));
+        setupMenu.setLayout(new BorderLayout());
         setupMenu.setDefaultCloseOperation(EXIT_ON_CLOSE);
         setupMenu.setTitle(title + " - Setup");
         setupMenu.setSize(500, 500);
@@ -156,6 +159,10 @@ public class GUI extends JFrame {
         JPanel p2 = new JPanel();
         JPanel p3 = new JPanel();
         JPanel p4 = new JPanel();
+        JPanel p5 = new JPanel();
+
+        p3.setLayout(new GridLayout(2, 1));
+        p4.setLayout(new FlowLayout());
 
         ButtonGroup scToggle = new ButtonGroup();
         amServerBtn = new JRadioButton("Host");
@@ -172,12 +179,13 @@ public class GUI extends JFrame {
         p2.add(instructionTxt);
         p3.add(amServerBtn);
         p3.add(amClientBtn);
-        p4.add(startGame);
+        p4.add(p2);
+        p4.add(p3);
+        p5.add(startGame);
 
-        setupMenu.add(p1);
-        setupMenu.add(p2);
-        setupMenu.add(p3);
-        setupMenu.add(p4);
+        setupMenu.add(p1, BorderLayout.NORTH);
+        setupMenu.add(p4, BorderLayout.CENTER);
+        setupMenu.add(p5, BorderLayout.SOUTH);
 
         setupMenu.setVisible(true);
 

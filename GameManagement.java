@@ -1,6 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.stream.*;
 
 public class GameManagement implements ActionListener{
 
@@ -15,6 +16,24 @@ public class GameManagement implements ActionListener{
         gui = new GUI(this);
         client = new Client();
 
+    }
+
+    public static void setArray(int[] Arr) {
+		
+		for (int i = 0; i < 3; i++) {
+			
+			//set a temp int from 1-20
+			int temp = (int)(Math.random()*20)+1;
+			
+			//if statement to check if the current temp is in the array to make array unique
+			if (IntStream.of(Arr).anyMatch(x -> x == temp)) {
+				i--;
+			} else {
+				
+				Arr[i] = temp;
+				System.out.print(Arr[i] + " ");
+			}
+		}
     }
 
     public void actionPerformed(ActionEvent e) {
