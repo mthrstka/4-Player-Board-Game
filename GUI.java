@@ -1,5 +1,8 @@
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
