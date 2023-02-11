@@ -1,8 +1,4 @@
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.*;
 import javax.swing.*;
 
 
@@ -67,19 +63,19 @@ public class GUI extends JFrame {
        JLabel lblPlayer1 = new JLabel("Player 1:", SwingConstants.CENTER);         //lbl for Player1 Score
        gameHome.add(lblPlayer1);
 
-       JLabel p1 = new JLabel("           P1");                  //Column header for game board
+       JLabel p1 = new JLabel("P1", SwingConstants.CENTER);                  //Column header for game board
        p1.setVerticalAlignment(SwingConstants.BOTTOM);      //Set the position of the text to the bottom
        gameHome.add(p1);
 
-       JLabel p2 = new JLabel("           P2");
+       JLabel p2 = new JLabel("P2", SwingConstants.CENTER);
        p2.setVerticalAlignment(SwingConstants.BOTTOM);
        gameHome.add(p2);
 
-       JLabel p3 = new JLabel("           P3");
+       JLabel p3 = new JLabel("P3", SwingConstants.CENTER);
        p3.setVerticalAlignment(SwingConstants.BOTTOM);
        gameHome.add(p3);
 
-       JLabel p4 = new JLabel("           P4");
+       JLabel p4 = new JLabel("P4", SwingConstants.CENTER);
        p4.setVerticalAlignment(SwingConstants.BOTTOM);
        gameHome.add(p4);
 
@@ -157,21 +153,23 @@ public class GUI extends JFrame {
        gameHome.setVisible(true);
 
     }
-        
-        
-
-    
 
     public void setupMenu() {
 
         setupMenu = new JFrame();
-        setupMenu.setLayout(new BorderLayout());
+        setupMenu.setLayout(new CardLayout());
         setupMenu.setDefaultCloseOperation(EXIT_ON_CLOSE);
         setupMenu.setTitle(title + " - Setup");
         setupMenu.setSize(500, 500);
 
+
+        /* Card 1 - Initial Menu */
+
+        JPanel cMenu = new JPanel();
+        cMenu.setLayout(new BorderLayout());
+
         JLabel topTxt = new JLabel("<html><h1>Welcome to the " + title + "!</h1></html>");
-        JLabel instructionTxt = new JLabel("<html>Join the game as the:<br /><em>(Hover for more info)</em></html>"); // Yes! we can use HTML stuffs!
+        JLabel instructionTxt = new JLabel("<html>Join the game as the:<br /><em>(Hover for more info)</em></html>"); // Yes! We can use HTML stuffs!
 
         JPanel p1 = new JPanel();
         JPanel p2 = new JPanel();
@@ -192,6 +190,7 @@ public class GUI extends JFrame {
         scToggle.add(amClientBtn);
 
         startGame = new JButton("Start Game!");
+        //startGame.setEnabled(false);                 //Uncomment before Monday
 
         p1.add(topTxt);
         p2.add(instructionTxt);
@@ -201,12 +200,24 @@ public class GUI extends JFrame {
         p4.add(p3);
         p5.add(startGame);
 
-        setupMenu.add(p1, BorderLayout.NORTH);
-        setupMenu.add(p4, BorderLayout.CENTER);
-        setupMenu.add(p5, BorderLayout.SOUTH);
+        cMenu.add(p1, BorderLayout.NORTH);
+        cMenu.add(p4, BorderLayout.CENTER);
+        cMenu.add(p5, BorderLayout.SOUTH);
 
+
+        /* Card 2 - Server Menu */
+
+        JPanel cServer = new JPanel();
+        cServer.setLayout(new BorderLayout());
+
+        
+
+
+        setupMenu.add(cMenu);
         setupMenu.setVisible(true);
 
+        amServerBtn.addActionListener(Listener);
+        amClientBtn.addActionListener(Listener);
         startGame.addActionListener(Listener);
     }
 }

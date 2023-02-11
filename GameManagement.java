@@ -57,26 +57,45 @@ public class GameManagement implements ActionListener{
 		}
     }
 
+    public String getServerAdress() {
+        return server.getLocalAddress();
+    }
+
     public void actionPerformed(ActionEvent e) {
         
+        if(e.getSource() == gui.amClientBtn || e.getSource() == gui.amServerBtn){
+            gui.startGame.setEnabled(true);
+        }
+
         if(e.getSource() == gui.startGame){
-            
-            try{
-                if(gui.amServerBtn.isSelected()){
-                    server = new Server();
-                    isServer = true;
-                    server.serverSetup();
-                    client.clientSetup();
-                } else if(gui.amClientBtn.isSelected()){
-                    client.clientSetup();
-                } else{
-                    gui.setupMenu.setVisible(false);
-                    gui.gameHome();
-                }
-            }catch(IOException error){
-                System.out.println();
-            } 
+        
+            if(gui.amServerBtn.isSelected()){
+                server = new Server();
+                isServer = true;
+                Thread ts = new Thread() {
+                    public void run(){
+                        try{
+                            server.serverSetup();
+                            client.clientSetup();
+                        } catch(Exception e){
+                            System.out.println("Server setup failed");
+                        }
+                    }
+                };
+            } else if(gui.amClientBtn.isSelected()){
+                Thread tc = new Thread() {
+                    public void run(){
+                        try{
+                            client.clientSetup();
+                        }catch(Exception e){
+                            System.out.println("Client setup failed");
+                        }
+                    }
+                };
+            } else{
+                gui.setupMenu.setVisible(false);
+                gui.gameHome();
+            }
         }
     }
-    
 }
