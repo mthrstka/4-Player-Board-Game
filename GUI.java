@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import javax.swing.*;
@@ -43,6 +44,17 @@ public class GUI extends JFrame {
         setupMenu();
     }
 
+    public void updateBoard(boolean[] arr){
+        for (int i = 0; i <arr.length; i++){
+            if(arr[i] == true){
+                //sett i + 1 JLabel to green
+            } else{
+                continue;
+            }
+            
+        }
+    }
+
     public void gameHome(){
 
        JFrame gameHome = new JFrame();
@@ -51,22 +63,23 @@ public class GUI extends JFrame {
        gameHome.setLayout(new GridLayout(6,6));
        gameHome.setTitle(title);
 
+        //first row
        JLabel lblPlayer1 = new JLabel("Player 1:", SwingConstants.CENTER);         //lbl for Player1 Score
        gameHome.add(lblPlayer1);
 
-       JLabel p1 = new JLabel("      P1");                  //Column header for game board
+       JLabel p1 = new JLabel("           P1");                  //Column header for game board
        p1.setVerticalAlignment(SwingConstants.BOTTOM);      //Set the position of the text to the bottom
        gameHome.add(p1);
 
-       JLabel p2 = new JLabel("      P2");
+       JLabel p2 = new JLabel("           P2");
        p2.setVerticalAlignment(SwingConstants.BOTTOM);
        gameHome.add(p2);
 
-       JLabel p3 = new JLabel("      P3");
+       JLabel p3 = new JLabel("           P3");
        p3.setVerticalAlignment(SwingConstants.BOTTOM);
        gameHome.add(p3);
 
-       JLabel p4 = new JLabel("      P4");
+       JLabel p4 = new JLabel("           P4");
        p4.setVerticalAlignment(SwingConstants.BOTTOM);
        gameHome.add(p4);
 
@@ -74,61 +87,58 @@ public class GUI extends JFrame {
        JLabel lblPlayer2 = new JLabel("Player 2:", SwingConstants.CENTER);         //lbl for Player2 Score
        gameHome.add(lblPlayer2);
 
-       gameHome.add(new JLabel("P1  ", SwingConstants.RIGHT));  //Row label with text postitioned to right
-       ImageIcon img = new ImageIcon("black_dot.png");      //Black dot Image 
+   
+        /////JLabel's one through sixteen represents each cell on the game board\\\\\ 
+        //Second Row
+        ImageIcon blackDot = new ImageIcon("black_dot.png");
+        Image imageBlack = blackDot.getImage();
+        Image newImageBlack = imageBlack.getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        blackDot = new ImageIcon(newImageBlack);
 
 
-       /////JLabel's one through sixteen represents each cell on the game board\\\\\ 
-       JLabel one = new JLabel(img);
-       JLabel two = new JLabel(img);
-       JLabel three = new JLabel(img);
-       JLabel four = new JLabel(img);
+        ImageIcon redDot = new ImageIcon("red_dot.png");
+        Image imageRed = redDot.getImage();
+        Image newImageRed = imageRed.getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        redDot = new ImageIcon(newImageRed);
 
-       gameHome.add(one);
-       gameHome.add(two);
-       gameHome.add(three);
-       gameHome.add(four);
+        ImageIcon greenDot = new ImageIcon("green_dot.png");
+        Image imageGreen = greenDot.getImage();
+        Image newImageGreen = imageGreen.getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        greenDot = new ImageIcon(newImageGreen);
 
-       gameHome.add(new JLabel(""));
-       gameHome.add(new JLabel("P2  ", SwingConstants.RIGHT));
 
-       JLabel five = new JLabel(img);
-       JLabel six = new JLabel(img);
-       JLabel seven = new JLabel(img);
-       JLabel eight = new JLabel(img);
+        JLabel[] lblArr = new JLabel[16];
+        int count = 1;
+        int arrIndex = 0;
+        for(int i = 0; i < 24; i++){
+            if(i%6 == 0){
+                JLabel lbl = new JLabel("P" + Integer.toString(count), SwingConstants.RIGHT);
+                count++;
+                gameHome.add(lbl);
+                continue;
+            } else if(i%6 == 5){
+                JLabel lbl = new JLabel("");
+                gameHome.add(lbl);
+                continue;
+            } else {
+                if(arrIndex%5 == 0){
+                JLabel lbl = new JLabel(blackDot);
+                lblArr[arrIndex] = lbl;
+                arrIndex++;
+                gameHome.add(lbl);
+                continue;
 
-       gameHome.add(five);
-       gameHome.add(six);
-       gameHome.add(seven);
-       gameHome.add(eight);
+                } else {
+                JLabel lbl = new JLabel(redDot);
+                lblArr[arrIndex] = lbl;
+                arrIndex++;
+                gameHome.add(lbl);
+                continue;
+                }
+            }
+        }
 
-       gameHome.add(new JLabel(""));
-       gameHome.add(new JLabel("P3  ", SwingConstants.RIGHT));
-
-       JLabel nine = new JLabel(img);
-       JLabel ten = new JLabel(img);
-       JLabel eleven = new JLabel(img);
-       JLabel twelve = new JLabel(img);
-
-       gameHome.add(nine);
-       gameHome.add(ten);
-       gameHome.add(eleven);
-       gameHome.add(twelve);
-
-       gameHome.add(new JLabel(""));
-       gameHome.add(new JLabel("P4  ", SwingConstants.RIGHT));
-
-       JLabel thirteen = new JLabel(img);
-       JLabel fourteen = new JLabel(img);
-       JLabel fifteen = new JLabel(img);
-       JLabel sixteen = new JLabel(img);
-
-       gameHome.add(thirteen);
-       gameHome.add(fourteen);
-       gameHome.add(fifteen);
-       gameHome.add(sixteen);
-
-       gameHome.add(new JLabel(""));
+        //sixth row
        JLabel lblPlayer3 = new JLabel("Player 3:", SwingConstants.CENTER);     //lbl for Player3 score
        gameHome.add(lblPlayer3);
 
@@ -139,6 +149,11 @@ public class GUI extends JFrame {
 
        JLabel lblPlayer4 = new JLabel("Player 4:", SwingConstants.CENTER);    //lbl for Player 4 score
        gameHome.add(lblPlayer4);
+     
+
+            
+    
+
        gameHome.setVisible(true);
 
     }
