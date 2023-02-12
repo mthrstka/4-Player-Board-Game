@@ -1,6 +1,5 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.stream.*;
 import java.util.Arrays;
 
@@ -142,7 +141,11 @@ public class GameManagement implements ActionListener{
                 gui.addressBar.setText("<html><p text-align: center>Your server address is:</p><br /><h1 text-align: center>" + getServerAdress() + 
                 "</h1><br /><p text-align: center;>All other players should join using this address.</p></html>");
                 isServer = true;
-
+                
+                gui.serverPlayerPanel.add(gui.p1Connect);        // moves player panel to active card
+                gui.serverPlayerPanel.add(gui.p2Connect);
+                gui.serverPlayerPanel.add(gui.p3Connect);
+                gui.serverPlayerPanel.add(gui.p4Connect);
                 Thread ts = new Thread() {
                     public void run(){
                         try{
@@ -156,6 +159,14 @@ public class GameManagement implements ActionListener{
 
                 ts.start();
             } else if(gui.amClientBtn.isSelected()){
+
+                gui.card.show(gui.setupMenu.getContentPane(), "client");
+
+                gui.clientPlayerPanel.add(gui.p1Connect);        // moves player panel to active card
+                gui.clientPlayerPanel.add(gui.p2Connect);
+                gui.clientPlayerPanel.add(gui.p3Connect);
+                gui.clientPlayerPanel.add(gui.p4Connect);
+
                 Thread tc = new Thread() {
                     public void run(){
                         try{

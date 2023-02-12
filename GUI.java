@@ -1,5 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 
 
 public class GUI extends JFrame {
@@ -13,6 +14,8 @@ public class GUI extends JFrame {
     CardLayout card = new CardLayout();
     JLabel addressBar;
     JLabel p1Connect, p2Connect, p3Connect, p4Connect;
+    JTextField addressInputField;
+    JPanel serverPlayerPanel, clientPlayerPanel; // Player panels made seperate so we will only have to edit one of them.
 
     public GUI(GameManagement obj) {
 
@@ -161,6 +164,11 @@ public class GUI extends JFrame {
         setupMenu.setTitle(title + " - Setup");
         setupMenu.setSize(500, 500);
 
+        p1Connect = new JLabel("Player 1: Waiting...", SwingConstants.CENTER);
+        p2Connect = new JLabel("Player 2: Waiting...", SwingConstants.CENTER);
+        p3Connect = new JLabel("Player 3: Waiting...", SwingConstants.CENTER);
+        p4Connect = new JLabel("Player 4: Waiting...", SwingConstants.CENTER);
+
 
         /* Card 1 - Initial Menu */
 
@@ -211,46 +219,60 @@ public class GUI extends JFrame {
 
         JPanel serverPanel1 = new JPanel();
         JPanel serverPanel2 = new JPanel();
-        JPanel serverPanel3 = new JPanel();
+        serverPlayerPanel = new JPanel();
         JPanel serverPanel4 = new JPanel();
 
         serverPanel1.setLayout(new GridLayout(2, 1));
-        
+        serverPlayerPanel.setLayout(new GridLayout(2, 2));
 
         addressBar = new JLabel("Server not initialized", SwingConstants.CENTER);
         serverPanel2.add(addressBar);
-        
-
-        serverPanel3.setLayout(new GridLayout(2, 2));
-
-        p1Connect = new JLabel("Player 1: You", SwingConstants.CENTER);
-        p2Connect = new JLabel("Player 2: Waiting...", SwingConstants.CENTER);
-        p3Connect = new JLabel("Player 3: Waiting...", SwingConstants.CENTER);
-        p4Connect = new JLabel("Player 4: Waiting...", SwingConstants.CENTER);
-
-        serverPanel3.add(p1Connect);
-        serverPanel3.add(p2Connect);
-        serverPanel3.add(p3Connect);
-        serverPanel3.add(p4Connect);
-
 
         startBtn = new JButton("Start Game");
         startBtn.setEnabled(false);
         serverPanel4.add(startBtn);
 
         serverPanel1.add(serverPanel2);
-        serverPanel1.add(serverPanel3);
+        serverPanel1.add(serverPlayerPanel);
 
         cServer.add(serverPanel1, BorderLayout.CENTER);
         cServer.add(serverPanel4, BorderLayout.SOUTH);
 
+
+        /* Card 3 - Client Menu */
+
+        JPanel cClient = new JPanel();
+        cClient.setLayout(new BorderLayout());
+
+        JLabel clientLabel = new JLabel("Enter the server address to connect to:", SwingConstants.CENTER);
+        addressInputField = new JTextField(30);
+
+        JPanel clientPanel1 = new JPanel();
+        JPanel clientPanel2 = new JPanel();
+        clientPlayerPanel = new JPanel();
+        JPanel clientPanel4 = new JPanel();
+
+        clientPanel2.add(clientLabel);
+        clientPanel2.add(addressInputField);
+        clientPlayerPanel.setLayout(new GridLayout(2, 2));
+
+        clientPanel1.setLayout(new GridLayout(2, 1));
+
+        clientPanel1.add(clientPanel2);
+        clientPanel1.add(clientPlayerPanel);
+
+        cClient.add(clientPanel1, BorderLayout.CENTER);
+        cClient.add(clientPanel4, BorderLayout.SOUTH);  // For later adding a cancel button to both server and client cards
+
         setupMenu.add(cMenu, "menu");
         setupMenu.add(cServer, "server");
+        setupMenu.add(cClient, "client");
 
         setupMenu.setVisible(true);
 
         amServerBtn.addActionListener(Listener);
         amClientBtn.addActionListener(Listener);
         continueBtn.addActionListener(Listener);
+        startBtn.addActionListener(Listener);
     }
 }
