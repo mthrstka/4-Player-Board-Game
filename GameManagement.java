@@ -64,14 +64,22 @@ public class GameManagement implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         
         if(e.getSource() == gui.amClientBtn || e.getSource() == gui.amServerBtn){
-            gui.startGame.setEnabled(true);
+            gui.continueBtn.setEnabled(true);
         }
 
-        if(e.getSource() == gui.startGame){
+        if(e.getSource() == gui.continueBtn){
         
             if(gui.amServerBtn.isSelected()){
-                server = new Server();
+
+                try {
+                    server = new Server();
+                } catch(Exception error){System.out.println("Server setup failed");}
+
+                gui.card.show(gui.setupMenu.getContentPane(), "server");
+                gui.addressBar.setText("<html><p text-align: center>Your server address is:</p><br /><h1 text-align: center>" + getServerAdress() + 
+                "</h1><br /><p text-align: center;>All other players should join using this address.</p></html>");
                 isServer = true;
+
                 Thread ts = new Thread() {
                     public void run(){
                         try{
@@ -82,6 +90,8 @@ public class GameManagement implements ActionListener{
                         }
                     }
                 };
+
+                ts.start();
             } else if(gui.amClientBtn.isSelected()){
                 Thread tc = new Thread() {
                     public void run(){
@@ -92,6 +102,8 @@ public class GameManagement implements ActionListener{
                         }
                     }
                 };
+
+                tc.start();
             } else{
                 gui.setupMenu.setVisible(false);
                 gui.gameHome();

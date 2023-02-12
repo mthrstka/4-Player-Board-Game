@@ -14,11 +14,14 @@ public class Server{
   SocketAddress address;
 
 
-  public void serverSetup() throws IOException {
+  public Server() throws IOException {
     server = new ServerSocket(1234);
     System.out.println("Server Started");
     address = server.getLocalSocketAddress();
-    socket = server.accept();
+  }
+
+  public void serverSetup() throws IOException {
+  socket = server.accept();
     System.out.println("Client Connected");
     in = new DataInputStream(socket.getInputStream());
     out = new DataOutputStream(socket.getOutputStream());
@@ -34,7 +37,7 @@ public class Server{
     // }
   }
 
-  public String getLocalAddress() {;
+  public String getLocalAddress() {     // Not functional, going to wait for Issac's changes
     return address.toString(); 
   }
 }

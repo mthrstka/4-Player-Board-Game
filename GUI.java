@@ -5,21 +5,20 @@ import javax.swing.*;
 public class GUI extends JFrame {
 
     GameManagement Listener;
-
     String title = "Onion Board Game";
-
     Boolean isServer = false;
-
-    JRadioButton amClientBtn;
-    JRadioButton amServerBtn;
-    JButton startGame;
+    JRadioButton amClientBtn, amServerBtn;
+    JButton continueBtn, startBtn;
     JFrame setupMenu;
+    CardLayout card = new CardLayout();
+    JLabel addressBar;
+    JLabel p1Connect, p2Connect, p3Connect, p4Connect;
 
     public GUI(GameManagement obj) {
 
         Listener = obj;
 
-        try{    // Sets the style to that of the native system
+        try{    // Sets the style to that of the system
 
             String os = System.getProperty("os.name");
             if(os.toLowerCase().contains("windows"))
@@ -157,7 +156,7 @@ public class GUI extends JFrame {
     public void setupMenu() {
 
         setupMenu = new JFrame();
-        setupMenu.setLayout(new CardLayout());
+        setupMenu.setLayout(card);
         setupMenu.setDefaultCloseOperation(EXIT_ON_CLOSE);
         setupMenu.setTitle(title + " - Setup");
         setupMenu.setSize(500, 500);
@@ -189,8 +188,8 @@ public class GUI extends JFrame {
         scToggle.add(amServerBtn);
         scToggle.add(amClientBtn);
 
-        startGame = new JButton("Start Game!");
-        //startGame.setEnabled(false);                 //Uncomment before Monday
+        continueBtn = new JButton("Continue");
+        //startGame.setEnabled(false);                 // TODO: Uncomment before Monday
 
         p1.add(topTxt);
         p2.add(instructionTxt);
@@ -198,7 +197,7 @@ public class GUI extends JFrame {
         p3.add(amClientBtn);
         p4.add(p2);
         p4.add(p3);
-        p5.add(startGame);
+        p5.add(continueBtn);
 
         cMenu.add(p1, BorderLayout.NORTH);
         cMenu.add(p4, BorderLayout.CENTER);
@@ -210,14 +209,48 @@ public class GUI extends JFrame {
         JPanel cServer = new JPanel();
         cServer.setLayout(new BorderLayout());
 
+        JPanel serverPanel1 = new JPanel();
+        JPanel serverPanel2 = new JPanel();
+        JPanel serverPanel3 = new JPanel();
+        JPanel serverPanel4 = new JPanel();
+
+        serverPanel1.setLayout(new GridLayout(2, 1));
         
 
+        addressBar = new JLabel("Server not initialized", SwingConstants.CENTER);
+        serverPanel2.add(addressBar);
+        
 
-        setupMenu.add(cMenu);
+        serverPanel3.setLayout(new GridLayout(2, 2));
+
+        p1Connect = new JLabel("Player 1: You", SwingConstants.CENTER);
+        p2Connect = new JLabel("Player 2: Waiting...", SwingConstants.CENTER);
+        p3Connect = new JLabel("Player 3: Waiting...", SwingConstants.CENTER);
+        p4Connect = new JLabel("Player 4: Waiting...", SwingConstants.CENTER);
+
+        serverPanel3.add(p1Connect);
+        serverPanel3.add(p2Connect);
+        serverPanel3.add(p3Connect);
+        serverPanel3.add(p4Connect);
+
+
+        startBtn = new JButton("Start Game");
+        startBtn.setEnabled(false);
+        serverPanel4.add(startBtn);
+
+        serverPanel1.add(serverPanel2);
+        serverPanel1.add(serverPanel3);
+
+        cServer.add(serverPanel1, BorderLayout.CENTER);
+        cServer.add(serverPanel4, BorderLayout.SOUTH);
+
+        setupMenu.add(cMenu, "menu");
+        setupMenu.add(cServer, "server");
+
         setupMenu.setVisible(true);
 
         amServerBtn.addActionListener(Listener);
         amClientBtn.addActionListener(Listener);
-        startGame.addActionListener(Listener);
+        continueBtn.addActionListener(Listener);
     }
 }
