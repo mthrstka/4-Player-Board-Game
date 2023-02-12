@@ -62,6 +62,29 @@ public class GameManagement implements ActionListener{
 			}
 		}
     }
+
+     public void updateBoard(boolean[] arr){
+        for (int i = 0; i <arr.length; i++){
+            if(arr[i] == true){
+                gui.lblArr[i].setIcon(gui.greenDot);
+            } else{
+                continue;
+            }
+            
+        }
+    }
+
+    public void resetBoard(){
+       for(int i = 0; i < gui.lblArr.length; i++){
+            if(i%5 == 0){
+                gui.lblArr[i].setIcon(gui.blackDot);
+            }
+            else{
+            gui.lblArr[i].setIcon(gui.redDot);
+            }
+       } 
+
+    }
     
     //takes int value to represent player and their guess array.
     public static void checkWin(int player, Integer[] Arr) {
