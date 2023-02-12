@@ -1,6 +1,5 @@
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.Border;
 
 
 public class GUI extends JFrame {
@@ -8,18 +7,38 @@ public class GUI extends JFrame {
     GameManagement Listener;
     String title = "Onion Board Game";
     Boolean isServer = false;
-    JRadioButton amClientBtn, amServerBtn;
-    JButton continueBtn, startBtn;
+    JFrame gameHome = new JFrame();
+    JRadioButton amClientBtn;
+    JRadioButton amServerBtn;
+    JButton startGame;
     JFrame setupMenu;
+    JLabel[] lblArr = new JLabel[16];
+    JButton continueBtn, startBtn;
     CardLayout card = new CardLayout();
     JLabel addressBar;
     JLabel p1Connect, p2Connect, p3Connect, p4Connect;
     JTextField addressInputField;
-    JPanel serverPlayerPanel, clientPlayerPanel; // Player panels made seperate so we will only have to edit one of them.
+    JPanel serverPlayerPanel, clientPlayerPanel; // Player panels made sep
+    ImageIcon blackDot = new ImageIcon("black_dot.png");
+    ImageIcon redDot = new ImageIcon("red_dot.png");
+    ImageIcon greenDot = new ImageIcon("green_dot.png");
+
+        
 
     public GUI(GameManagement obj) {
 
         Listener = obj;
+        Image imageGreen = greenDot.getImage();
+        Image newImageGreen = imageGreen.getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        greenDot = new ImageIcon(newImageGreen);
+         Image imageBlack = blackDot.getImage();
+        Image newImageBlack = imageBlack.getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        blackDot = new ImageIcon(newImageBlack);
+        Image imageRed = redDot.getImage();
+        Image newImageRed = imageRed.getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        redDot = new ImageIcon(newImageRed);
+       
+   
 
         try{    // Sets the style to that of the system
 
@@ -42,20 +61,10 @@ public class GUI extends JFrame {
         setupMenu();
     }
 
-    public void updateBoard(boolean[] arr){
-        for (int i = 0; i <arr.length; i++){
-            if(arr[i] == true){
-                //sett i + 1 JLabel to green
-            } else{
-                continue;
-            }
-            
-        }
-    }
 
     public void gameHome(){
 
-       JFrame gameHome = new JFrame();
+      
        gameHome.setSize(500,500);
        gameHome.setDefaultCloseOperation(EXIT_ON_CLOSE);
        gameHome.setLayout(new GridLayout(6,6));
@@ -86,26 +95,7 @@ public class GUI extends JFrame {
        gameHome.add(lblPlayer2);
 
    
-        /////JLabel's one through sixteen represents each cell on the game board\\\\\ 
-        //Second Row
-        ImageIcon blackDot = new ImageIcon("black_dot.png");
-        Image imageBlack = blackDot.getImage();
-        Image newImageBlack = imageBlack.getScaledInstance(20,20, Image.SCALE_SMOOTH);
-        blackDot = new ImageIcon(newImageBlack);
-
-
-        ImageIcon redDot = new ImageIcon("red_dot.png");
-        Image imageRed = redDot.getImage();
-        Image newImageRed = imageRed.getScaledInstance(20,20, Image.SCALE_SMOOTH);
-        redDot = new ImageIcon(newImageRed);
-
-        ImageIcon greenDot = new ImageIcon("green_dot.png");
-        Image imageGreen = greenDot.getImage();
-        Image newImageGreen = imageGreen.getScaledInstance(20,20, Image.SCALE_SMOOTH);
-        greenDot = new ImageIcon(newImageGreen);
-
-
-        JLabel[] lblArr = new JLabel[16];
+        //ROWS 2-5
         int count = 1;
         int arrIndex = 0;
         for(int i = 0; i < 24; i++){
@@ -148,10 +138,6 @@ public class GUI extends JFrame {
        JLabel lblPlayer4 = new JLabel("Player 4:", SwingConstants.CENTER);    //lbl for Player 4 score
        gameHome.add(lblPlayer4);
      
-
-            
-    
-
        gameHome.setVisible(true);
 
     }
