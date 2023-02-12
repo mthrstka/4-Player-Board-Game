@@ -21,15 +21,25 @@ public class GUI extends JFrame {
     String title = "Onion Board Game";
 
     Boolean isServer = false;
+     JFrame gameHome = new JFrame();
 
     JRadioButton amClientBtn;
     JRadioButton amServerBtn;
     JButton startGame;
     JFrame setupMenu;
+    JLabel[] lblArr = new JLabel[16];
+    ImageIcon greenDot = new ImageIcon("green_dot.png");
+        
+
 
     public GUI(GameManagement obj) {
 
         Listener = obj;
+        Image imageGreen = greenDot.getImage();
+        Image newImageGreen = imageGreen.getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        greenDot = new ImageIcon(newImageGreen);
+       
+   
 
         try{
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -42,10 +52,12 @@ public class GUI extends JFrame {
         setupMenu();
     }
 
+   
+
     public void updateBoard(boolean[] arr){
         for (int i = 0; i <arr.length; i++){
             if(arr[i] == true){
-                //sett i + 1 JLabel to green
+                lblArr[i].setIcon(greenDot);
             } else{
                 continue;
             }
@@ -55,7 +67,7 @@ public class GUI extends JFrame {
 
     public void gameHome(){
 
-       JFrame gameHome = new JFrame();
+      
        gameHome.setSize(500,500);
        gameHome.setDefaultCloseOperation(EXIT_ON_CLOSE);
        gameHome.setLayout(new GridLayout(6,6));
@@ -104,7 +116,6 @@ public class GUI extends JFrame {
         greenDot = new ImageIcon(newImageGreen);
 
 
-        JLabel[] lblArr = new JLabel[16];
         int count = 1;
         int arrIndex = 0;
         for(int i = 0; i < 24; i++){
@@ -147,10 +158,6 @@ public class GUI extends JFrame {
        JLabel lblPlayer4 = new JLabel("Player 4:", SwingConstants.CENTER);    //lbl for Player 4 score
        gameHome.add(lblPlayer4);
      
-
-            
-    
-
        gameHome.setVisible(true);
 
     }
