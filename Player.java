@@ -1,6 +1,7 @@
 public class Player {
     private int[] array;
     private int score;
+    private int playerNum;
 
     public Player() {
         array = new int[20];
