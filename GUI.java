@@ -88,18 +88,18 @@ public class GUI extends JFrame {
    
         /////JLabel's one through sixteen represents each cell on the game board\\\\\ 
         //Second Row
-        ImageIcon blackDot = new ImageIcon("black_dot.png");
+        ImageIcon blackDot = new ImageIcon("img/black_dot.png");
         Image imageBlack = blackDot.getImage();
         Image newImageBlack = imageBlack.getScaledInstance(20,20, Image.SCALE_SMOOTH);
         blackDot = new ImageIcon(newImageBlack);
 
 
-        ImageIcon redDot = new ImageIcon("red_dot.png");
+        ImageIcon redDot = new ImageIcon("img/red_dot.png");
         Image imageRed = redDot.getImage();
         Image newImageRed = imageRed.getScaledInstance(20,20, Image.SCALE_SMOOTH);
         redDot = new ImageIcon(newImageRed);
 
-        ImageIcon greenDot = new ImageIcon("green_dot.png");
+        ImageIcon greenDot = new ImageIcon("img/green_dot.png");
         Image imageGreen = greenDot.getImage();
         Image newImageGreen = imageGreen.getScaledInstance(20,20, Image.SCALE_SMOOTH);
         greenDot = new ImageIcon(newImageGreen);

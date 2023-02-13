@@ -45,7 +45,7 @@ public class GameManagement implements ActionListener{
         playerTurn = 1;
     }
 
-    public static void setArray(int[] Arr) {
+    public static void setArray(Integer[] Arr) {
 		
 		for (int i = 0; i < 3; i++) {
 			
@@ -53,7 +53,7 @@ public class GameManagement implements ActionListener{
 			int temp = (int)(Math.random()*20)+1;
 			
 			//if statement to check if the current temp is in the array to make array unique
-			if (IntStream.of(Arr).anyMatch(x -> x == temp)) {
+			if (Arrays.asList(Arr).contains(temp)) {
 				i--;
 			} else {
 				
