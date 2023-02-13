@@ -1,32 +1,126 @@
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Server {
+  public ServerSocket serverSocket;
+  private ArrayList<Socket> clients;
+  private ArrayList<ObjectOutputStream> outputs;
+  private int clientNum = 0;
 
-  ServerSocket server;
-  Socket socket;
-  DataInputStream in;
-  DataOutputStream out;
+  // Constructor to initialize server socket and array lists
+  public Server(InetAddress ip, int port) {
+    try {
+      serverSocket = new ServerSocket(port, 50, ip);
+      clients = new ArrayList<>();
+      outputs = new ArrayList<>();
+      // prints the value of the ip the user needs
+      String[] temp = ip.toString().split("/");
+      String serverAddressDisplayed = temp[temp.length-1];
+      System.out.println("Server started on address: " + serverAddressDisplayed + " port: " + port + ".");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
-  public void serverSetup() throws IOException {
-    server = new ServerSocket(1234);
-    System.out.println("Server Started");
-    socket = server.accept();
-    System.out.println("Client Connected");
-    in = new DataInputStream(socket.getInputStream());
-    out = new DataOutputStream(socket.getOutputStream());
-
-    while (true) {
-      String message = in.readUTF();
-      if(message.toLowerCase() == "close()") {
-        server.close();
-        break;
+  // Function to accept incoming client connections
+  public void acceptConnections() {
+    try {
+      while (true) {
+        if(clientNum >= 4) {
+          // client limit reached, do not accept more clients.
+        } else {
+          // accept the new client.
+          Socket client = serverSocket.accept();
+          clients.add(client);
+          ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
+          outputs.add(out);
+          ClientHandler handler = new ClientHandler(client, this);
+          new Thread(handler).start();
+          String[] temp = client.getInetAddress().getHostAddress().split("/");
+          String clientAddressDisplayed = temp[temp.length-1];
+          clientNum +=1;
+          System.out.println("Client " + clients.indexOf(client)+1 + "connected from " + clientAddressDisplayed + ".");
+        }
       }
-      System.out.println("Client: " + message);
-      out.writeUTF("Server: " + message);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  // Function to broadcast messages to all clients
+  public void broadcastMessage(Object message) {
+    for (ObjectOutputStream out : outputs) {
+      try {
+        out.writeObject(message);
+        out.flush();
+        System.out.println("Message broadcast to client " + (outputs.indexOf(out)+1) + ": " + message);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  public void sendMessage(Object message, int playerNumber) {
+    try {
+      ObjectOutputStream out = outputs.get(playerNumber-1);
+      out.writeObject(message);
+      out.flush();
+      System.out.println("Message sent to client" + playerNumber);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  // Function to remove a client from the array lists
+  public void removeClient(Socket client, ObjectOutputStream out) {
+    clients.remove(client);
+    outputs.remove(out);
+    System.out.println("Client disconnected from " + client.getInetAddress().getHostAddress() + ".");
+  }
+}
+
+// ClientHandler class to handle individual clients
+class ClientHandler implements Runnable {
+  private Socket client;
+  private ObjectInputStream in;
+  private ObjectOutputStream out;
+  private Server server;
+
+  // Constructor to initialize client socket, input and output streams, and server
+  public ClientHandler(Socket client, Server server) {
+    this.client = client;
+    this.server = server;
+    try {
+      in = new ObjectInputStream(client.getInputStream());
+      out = new ObjectOutputStream(client.getOutputStream());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  // Function to handle incoming messages from the client
+  public void run() {
+    Object message = null;
+    try {
+      while ((message = in.readObject()) != null) {
+        System.out.println("Message received from " + client.getInetAddress().getHostAddress() + ": " + message);
+        // Handle private messages
+        if(message.toString().contains("player")) {
+          int sendTo = Integer.parseInt(message.toString().substring(6, 6));
+          server.sendMessage(message.toString().substring(9), sendTo);
+        }
+        // Handle public messages
+        else { 
+          server.broadcastMessage(message);
+        }
+      }
+    } catch (IOException | ClassNotFoundException e) {
+      server.removeClient(client, out);
     }
   }
 }
