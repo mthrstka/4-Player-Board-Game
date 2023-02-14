@@ -24,7 +24,7 @@ public class GameManagement implements ActionListener{
     public GameManagement() {
 
         gui = new GUI(this);
-        client = new Client();
+//        client = new Client();
 
     }
 
@@ -61,6 +61,29 @@ public class GameManagement implements ActionListener{
 				System.out.print(Arr[i] + " ");
 			}
 		}
+    }
+
+     public void updateBoard(boolean[] arr){
+        for (int i = 0; i <arr.length; i++){
+            if(arr[i] == true){
+                gui.lblArr[i].setIcon(gui.greenDot);
+            } else{
+                continue;
+            }
+            
+        }
+    }
+
+    public void resetBoard(){
+       for(int i = 0; i < gui.lblArr.length; i++){
+            if(i%5 == 0){
+                gui.lblArr[i].setIcon(gui.blackDot);
+            }
+            else{
+            gui.lblArr[i].setIcon(gui.redDot);
+            }
+       } 
+
     }
     
     //takes int value to represent player and their guess array.
@@ -119,9 +142,9 @@ public class GameManagement implements ActionListener{
     	
     }
 
-    public String getServerAdress() {
-        return server.getLocalAddress();
-    }
+//     public String getServerAdress() {
+//       return server.getLocalAddress();    // TODO: Old server method, need to fix
+//     }
 
     public void actionPerformed(ActionEvent e) {
         
@@ -133,11 +156,11 @@ public class GameManagement implements ActionListener{
             if(gui.amServerBtn.isSelected()){
 
                 try {
-                    server = new Server();
+                    // server = new Server();  // TODO: Old server method, need to fix
                 } catch(Exception error){System.out.println("Server setup failed");}
 
                 gui.card.show(gui.setupMenu.getContentPane(), "server");
-                gui.addressBar.setText("<html><p text-align: center>Your server address is:</p><br /><h1 text-align: center>" + getServerAdress() + 
+                gui.addressBar.setText("<html><p text-align: center>Your server address is:</p><br /><h1 text-align: center>" + /* getServerAdress() + */
                 "</h1><br /><p text-align: center;>All other players should join using this address.</p></html>");
                 isServer = true;
                 
@@ -148,8 +171,8 @@ public class GameManagement implements ActionListener{
                 Thread ts = new Thread() {
                     public void run(){
                         try{
-                            server.serverSetup();
-                            client.clientSetup();
+                            // server.serverSetup();   // TODO: Old server method, need to fix
+                            // client.clientSetup();   // TODO: Old client method, need to fix
                         } catch(Exception e){
                             System.out.println("Server setup failed");
                         }
@@ -169,7 +192,7 @@ public class GameManagement implements ActionListener{
                 Thread tc = new Thread() {
                     public void run(){
                         try{
-                            client.clientSetup();
+                            // client.clientSetup();   // TODO: Old client method, need to fix
                         }catch(Exception e){
                             System.out.println("Client setup failed");
                         }
