@@ -6,8 +6,10 @@ public class App {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the server ip: ");
         String serverIP = "192.168.1.241";
+        serverIP = sc.next();
         System.out.println("Enter the server port: ");
         int port = 1234;
+        port = sc.nextInt();
         Client client = new Client(serverIP, port);
         client.sendMessage("Player connected");
         for(int i=0; i<2; i++) {

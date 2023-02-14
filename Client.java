@@ -57,7 +57,7 @@ public class Client {
             System.out.println("There was an error reading the messages. ");
         }
     }
-
+    
     // Function to close the socket connection
     public void closeConnection() {
         try {
