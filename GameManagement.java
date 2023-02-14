@@ -127,9 +127,8 @@ public class GameManagement implements ActionListener{
         
         if(e.getSource() == gui.amClientBtn || e.getSource() == gui.amServerBtn){
             gui.continueBtn.setEnabled(true);
-        }
 
-        if(e.getSource() == gui.continueBtn){
+        } else if(e.getSource() == gui.continueBtn){
         
             if(gui.amServerBtn.isSelected()){
 
@@ -182,7 +181,18 @@ public class GameManagement implements ActionListener{
                 gui.setupMenu.setVisible(false);
                 gui.gameHome();
             }
-        }
+        } else if(e.getSource() == gui.btnSubmit){
+			gui.guess = gui.getGuessNumber();
+			System.out.println(gui.guess);	// TODO: test output, remove later
+		} else {
+            for(int i = 0; i < 20; i++){
+                if(e.getSource() == gui.tglBtn[i]) {
+                        gui.untoggleButtons(i);
+                        gui.tglBtn[i].setSelected(true);
+                        return;
+                }
+            }
+	    }
     }
     
 }
