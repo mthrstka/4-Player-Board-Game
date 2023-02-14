@@ -143,7 +143,7 @@ public class GameManagement implements ActionListener{
     }
 
     public String getServerAdress() {
-        return server.getLocalAddress();
+        return server.getLocalAddress();    // TODO: Old server method, need to fix
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -157,7 +157,7 @@ public class GameManagement implements ActionListener{
             if(gui.amServerBtn.isSelected()){
 
                 try {
-                    server = new Server();
+                    server = new Server();  // TODO: Old server method, need to fix
                 } catch(Exception error){System.out.println("Server setup failed");}
 
                 gui.card.show(gui.setupMenu.getContentPane(), "server");
@@ -172,8 +172,8 @@ public class GameManagement implements ActionListener{
                 Thread ts = new Thread() {
                     public void run(){
                         try{
-                            server.serverSetup();
-                            client.clientSetup();
+                            server.serverSetup();   // TODO: Old server method, need to fix
+                            client.clientSetup();   // TODO: Old client method, need to fix
                         } catch(Exception e){
                             System.out.println("Server setup failed");
                         }
@@ -193,7 +193,7 @@ public class GameManagement implements ActionListener{
                 Thread tc = new Thread() {
                     public void run(){
                         try{
-                            client.clientSetup();
+                            client.clientSetup();   // TODO: Old client method, need to fix
                         }catch(Exception e){
                             System.out.println("Client setup failed");
                         }
