@@ -1,0 +1,109 @@
+// This uses PlantUML VSCode extention
+
+@startuml
+
+card Driver[
+    Driver
+    ----
+    +<i>main(String[] args)</i>: void
+]
+
+card GameManagment[
+    GameManagment
+    ----
+    -gui: GUI
+    -server: Server
+    -client: Client
+    -isServer: boolean
+    +<i>currentTurn: int
+    +playerTurn: int
+    +roundNum: int
+    +playerScores: int[]
+    +<i>playerBl[]: boolean[]
+    +<i>arrP1[]: Integer[]
+    +<i>arrP2[]: Integer[]
+    +<i>arrP3[]: Integer[]
+    +<i>arrP4[]: Integer[]
+    ----
+    +GameManagment()
+    +nextTurn(): void
+    +newRound(): void
+    +setArray(Integer[] arr): void
+    +checkWin(int player, Integer[] arr): void
+    +getServerAdress(): String
+    +actionPerformed(ActionEvent e): void
+]
+
+card GUI[
+    GUI
+    ----
+    Listener: GameManagment
+    title: String
+    isServer: boolean
+    amClient: JRadioButton
+    amServer: JRadioButton
+    continueBtn: JButton
+    startBtn: JButton
+    setupMenu: JFrame
+    card: CardLayout
+    addressBar: JLabel
+    p1Connect: JLabel
+    p2Connect: JLabel
+    p3Connect: JLabel
+    p4Connect: JLabel
+    addressInputField: JTextField
+    serverPlayerPanel: JPanel
+    clientPlayerPanel: JPanel
+    ----
+    +GUI(GameManagment obj)
+    +updateBoard(boolean[] arr): void
+    +gameHome(): void
+    +setupMenu(): void
+]
+
+card Player[
+    Player
+    ----
+    -array: int[]
+    -score: int
+    -playerNum: int
+    ----
+    +getInitArray(): int[]
+    +getFullArray(): int[]
+    +setArrayData(int[] arr): void
+    +win(): void
+    +lose(): void
+    +getScore(): void
+]
+
+card Server[
+    Server
+    ----
+    server: ServerSocket
+    socket: Socket
+    in: DataInputStream
+    out: DataOutputStream
+    address: SocketAddress
+    ----
+    +Server()
+    +serverStartup(): void
+    +getLocalAdress(): String
+]
+
+card Client[
+    Client
+    ----
+    socket: Socket
+    in: DataInputStream
+    out: DataOutputStream
+    ----
+    +clientSetup(): void
+]
+
+Driver --> GameManagment
+GameManagment --> GUI
+GameManagment --> Player
+GameManagment --> Server
+GameManagment --> Client
+
+@enduml
