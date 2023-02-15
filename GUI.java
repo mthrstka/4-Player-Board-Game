@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.util.List;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -36,19 +35,6 @@ public class GUI {
 
     public GUI(GameManagement obj) {
 
-        Listener = obj;
-        Image imageGreen = greenDot.getImage();
-        Image newImageGreen = imageGreen.getScaledInstance(20,20, Image.SCALE_SMOOTH);
-        greenDot = new ImageIcon(newImageGreen);
-         Image imageBlack = blackDot.getImage();
-        Image newImageBlack = imageBlack.getScaledInstance(20,20, Image.SCALE_SMOOTH);
-        blackDot = new ImageIcon(newImageBlack);
-        Image imageRed = redDot.getImage();
-        Image newImageRed = imageRed.getScaledInstance(20,20, Image.SCALE_SMOOTH);
-        redDot = new ImageIcon(newImageRed);
-       
-   
-
         try{    // Sets the style to that of the system
 
             String os = System.getProperty("os.name");
@@ -67,6 +53,17 @@ public class GUI {
             UIManager.put("ToolTip.background", Color.WHITE);
         }
 
+        Listener = obj;
+        Image imageGreen = greenDot.getImage();
+        Image newImageGreen = imageGreen.getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        greenDot = new ImageIcon(newImageGreen);
+        Image imageBlack = blackDot.getImage();
+        Image newImageBlack = imageBlack.getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        blackDot = new ImageIcon(newImageBlack);
+        Image imageRed = redDot.getImage();
+        Image newImageRed = imageRed.getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        redDot = new ImageIcon(newImageRed);
+
         GuessFrame();
         setupMenu();
     }
@@ -79,6 +76,7 @@ public class GUI {
        gameHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        gameHome.setLayout(new GridLayout(6,6));
        gameHome.setTitle(title);
+       gameHome.getContentPane().setBackground(setupMenu.getContentPane().getBackground());      //Work-around for background color issue.
 
         //first row
        JLabel lblPlayer1 = new JLabel("Player 1:", SwingConstants.CENTER);         //lbl for Player1 Score
