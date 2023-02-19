@@ -82,6 +82,11 @@ public class Server {
     outputs.remove(out);
     System.out.println("Client disconnected from " + client.getInetAddress().getHostAddress() + ".");
   }
+
+  public String getAddress() {
+    return serverSocket.getInetAddress().toString();
+  }
+
 }
 
 // ClientHandler class to handle individual clients

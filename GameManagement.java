@@ -43,6 +43,7 @@ public class GameManagement implements ActionListener{
         roundNum++;
         currentTurn = 1;
         playerTurn = 1;
+        resetBoard();
     }
 
     public static void setArray(Integer[] Arr) {
@@ -63,7 +64,7 @@ public class GameManagement implements ActionListener{
 		}
     }
 
-     public void updateBoard(boolean[] arr){
+     public void updateBoard(boolean[] arr) {
         for (int i = 0; i <arr.length; i++){
             if(arr[i] == true){
                 gui.lblArr[i].setIcon(gui.greenDot);
@@ -74,7 +75,7 @@ public class GameManagement implements ActionListener{
         }
     }
 
-    public void resetBoard(){
+    public void resetBoard() {
        for(int i = 0; i < gui.lblArr.length; i++){
             if(i%5 == 0){
                 gui.lblArr[i].setIcon(gui.blackDot);
@@ -142,10 +143,6 @@ public class GameManagement implements ActionListener{
     	
     }
 
-//     public String getServerAdress() {
-//       return server.getLocalAddress();    // TODO: Old server method, need to fix
-//     }
-
     public void actionPerformed(ActionEvent e) {
         
         if(e.getSource() == gui.amClientBtn || e.getSource() == gui.amServerBtn){
@@ -159,15 +156,14 @@ public class GameManagement implements ActionListener{
                     // server = new Server();  // TODO: Old server method, need to fix
                 } catch(Exception error){System.out.println("Server setup failed");}
 
-                gui.card.show(gui.setupMenu.getContentPane(), "server");
-                gui.addressBar.setText("<html><p text-align: center>Your server address is:</p><br /><h1 text-align: center>" + /* getServerAdress() + */
-                "</h1><br /><p text-align: center;>All other players should join using this address.</p></html>");
+                gui.switchCard("server");
+                gui.setAddress(server.getAddress());
                 isServer = true;
                 
-                gui.serverPlayerPanel.add(gui.p1Connect);        // moves player panel to active card
-                gui.serverPlayerPanel.add(gui.p2Connect);
-                gui.serverPlayerPanel.add(gui.p3Connect);
-                gui.serverPlayerPanel.add(gui.p4Connect);
+                for(int i = 0; i < 4; i++){
+                    gui.serverPlayerPanel.add(gui.playerConnect[i]);
+                }
+
                 Thread ts = new Thread() {
                     public void run(){
                         try{
@@ -182,12 +178,11 @@ public class GameManagement implements ActionListener{
                 ts.start();
             } else if(gui.amClientBtn.isSelected()){
 
-                gui.card.show(gui.setupMenu.getContentPane(), "client");
+                gui.switchCard("client");
 
-                gui.clientPlayerPanel.add(gui.p1Connect);        // moves player panel to active card
-                gui.clientPlayerPanel.add(gui.p2Connect);
-                gui.clientPlayerPanel.add(gui.p3Connect);
-                gui.clientPlayerPanel.add(gui.p4Connect);
+                for(int i = 0; i < 4; i++){
+                    gui.clientPlayerPanel.add(gui.playerConnect[i]);
+                }
 
                 Thread tc = new Thread() {
                     public void run(){
