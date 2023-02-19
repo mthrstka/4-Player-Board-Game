@@ -16,6 +16,11 @@ public class Client {
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
             System.out.println("Connected to server.");
+            try {
+                receiveAllMessages();
+            } catch (Exception e) {
+                System.out.println("No messages remaining.");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -31,6 +36,11 @@ public class Client {
         }
     }
 
+    public void sendGuess(int guess, int playerNum) {
+        String msg = "Guess: " + guess + " from " + playerNum;
+        sendMessage(msg);
+    }
+
     // Function to receive messages from the server
     public Object receiveMessage() {
         Object message = "";
@@ -43,6 +53,7 @@ public class Client {
         return message;
     }
 
+    //Function to receive all messages from the server
     public void receiveAllMessages() {
         try {
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());

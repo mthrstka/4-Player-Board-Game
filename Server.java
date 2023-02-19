@@ -8,9 +8,10 @@ import java.util.ArrayList;
 
 public class Server {
   public ServerSocket serverSocket;
+  public String serverAddressFormatted;
   private ArrayList<Socket> clients;
   private ArrayList<ObjectOutputStream> outputs;
-  private int clientNum = 0;
+  public int clientNum = 0;
 
   // Constructor to initialize server socket and array lists
   public Server(InetAddress ip, int port) {
@@ -21,6 +22,7 @@ public class Server {
       // prints the value of the ip the user needs
       String[] temp = ip.toString().split("/");
       String serverAddressDisplayed = temp[temp.length-1];
+      serverAddressFormatted = serverAddressDisplayed;
       System.out.println("Server started on address: " + serverAddressDisplayed + " port: " + port + ".");
     } catch (IOException e) {
       e.printStackTrace();
@@ -28,12 +30,9 @@ public class Server {
   }
 
   // Function to accept incoming client connections
-  public void acceptConnections() {
+  public void acceptConnection() {
     try {
-      while (true) {
-        if(clientNum >= 4) {
-          // client limit reached, do not accept more clients.
-        } else {
+        if(clientNum < 4) {
           // accept the new client.
           Socket client = serverSocket.accept();
           clients.add(client);
@@ -44,9 +43,10 @@ public class Server {
           String[] temp = client.getInetAddress().getHostAddress().split("/");
           String clientAddressDisplayed = temp[temp.length-1];
           clientNum +=1;
-          System.out.println("Client " + clients.indexOf(client)+1 + "connected from " + clientAddressDisplayed + ".");
+          System.out.println("Player " + clientNum + " as client " + ( (Integer) clients.indexOf(client) + 1) + " connected from " + clientAddressDisplayed + ".");
+          sendMessage("You have connected to " + serverAddressFormatted + ". You are Player: " + clientNum, clientNum);
         }
-      }
+        // client limit reached, do not accept more clients.
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -70,7 +70,7 @@ public class Server {
       ObjectOutputStream out = outputs.get(playerNumber-1);
       out.writeObject(message);
       out.flush();
-      System.out.println("Message sent to client" + playerNumber);
+      System.out.println("Message sent to client. (Player " + playerNumber + ")");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -78,9 +78,11 @@ public class Server {
 
   // Function to remove a client from the array lists
   public void removeClient(Socket client, ObjectOutputStream out) {
+    System.out.print("Client " + clients.indexOf(client) + " disconnected from " + client.getInetAddress().getHostAddress() + ".");
     clients.remove(client);
     outputs.remove(out);
-    System.out.println("Client disconnected from " + client.getInetAddress().getHostAddress() + ".");
+    clientNum -= 1;
+    System.out.println(" Client " + clients.indexOf(client) + " removed.");
   }
 
   public String getAddress() {
@@ -114,15 +116,15 @@ class ClientHandler implements Runnable {
     try {
       while ((message = in.readObject()) != null) {
         System.out.println("Message received from " + client.getInetAddress().getHostAddress() + ": " + message);
-        // Handle private messages
-        if(message.toString().contains("player")) {
-          int sendTo = Integer.parseInt(message.toString().substring(6, 6));
-          server.sendMessage(message.toString().substring(9), sendTo);
-        }
+        // // Handle private messages
+        // if(message.toString().contains("player")) {
+        //   int sendTo = Integer.parseInt(message.toString().substring(6, 6));
+        //   server.sendMessage(message.toString().substring(9), sendTo);
+        // }
         // Handle public messages
-        else { 
+        // else { 
           server.broadcastMessage(message);
-        }
+        // }
       }
     } catch (IOException | ClassNotFoundException e) {
       server.removeClient(client, out);

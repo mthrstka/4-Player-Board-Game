@@ -7,7 +7,6 @@ import javax.swing.border.EmptyBorder;
 
 public class GUI {
     
-
     GameManagement Listener;
     String title = "Onion Board Game";
 
@@ -88,7 +87,7 @@ public class GUI {
         for (int i = 0; i < 4; i++){
             playerConnect[i] = new JLabel("Player " + (i+1) + ": Waiting...", SwingConstants.CENTER);
         }
-
+        
         /* Card 1 - Initial Menu */
 
         JPanel cMenu = new JPanel();
@@ -198,11 +197,9 @@ public class GUI {
         setupMenu.add(cServer, "server");
         setupMenu.add(cClient, "client");
 
-
         setupMenu.pack();
         setupMenu.setMinimumSize(new Dimension(500,500));
         setupMenu.setLocationRelativeTo(null);
-
         setupMenu.setVisible(true);
 
         amServerBtn.addActionListener(Listener);
@@ -212,15 +209,14 @@ public class GUI {
     }
 
     public void gameHome(){
-        
         gameHome = new JFrame();
         gameHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameHome.setTitle(title);
         gameHome.setLayout(new BorderLayout());
 
-       makeGuess = new JButton("Make guess");
-       JPanel gameBoard = new JPanel();
-       gameBoard.setLayout(new GridLayout(6,6));
+        makeGuess = new JButton("Make guess");
+        JPanel gameBoard = new JPanel();
+        gameBoard.setLayout(new GridLayout(6,6));
 
         /* Top panel */
 
@@ -249,7 +245,6 @@ public class GUI {
        JLabel p4 = new JLabel("P4", SwingConstants.CENTER);
        p4.setVerticalAlignment(SwingConstants.BOTTOM);
        gameBoard.add(p4);
-
       
        lblPlayer2 = new JLabel("Player 2: 0", SwingConstants.CENTER);         //lbl for Player2 Score
        gameBoard.add(lblPlayer2);
@@ -289,7 +284,6 @@ public class GUI {
         //sixth row
        lblPlayer3 = new JLabel("Player 3: 0", SwingConstants.CENTER);     //lbl for Player3 score
        gameBoard.add(lblPlayer3);
-
        gameBoard.add(new JLabel(""));            //empty Jlabels along the bottom of the GUI
        gameBoard.add(new JLabel(""));
        gameBoard.add(new JLabel(""));
@@ -297,7 +291,6 @@ public class GUI {
 
        lblPlayer4 = new JLabel("Player 4: 0", SwingConstants.CENTER);    //lbl for Player 4 score
        gameBoard.add(lblPlayer4);
-     
        gameHome.add(gameBoard, BorderLayout.CENTER);
 
 
@@ -307,20 +300,16 @@ public class GUI {
         makeGuess.addActionListener(Listener);
         boardBottom.add(makeGuess);
         gameHome.add(boardBottom, BorderLayout.SOUTH);
-
-
         gameHome.pack();
         gameHome.setLocation(setupMenu.getX(), setupMenu.getY());
         gameHome.setMinimumSize(new Dimension(500,500));
-
-       gameHome.setVisible(true);
+        gameHome.setVisible(true);
 
        GuessFrame(); // Creates GuessFrame, but not visible till needed
 
     }
 
     public void GuessFrame() {
-
 		guessFrame = new JFrame();
 
 		guessFrame.setTitle("Number Selecter");
@@ -370,9 +359,7 @@ public class GUI {
 				yPos = 4;
 
 			gbc_tglBtn[i].gridy = yPos;
-
 			guessWindow.add(tglBtn[i], gbc_tglBtn[i]);
-
 			tglBtn[i].addActionListener(Listener);
 		}
 
@@ -387,31 +374,24 @@ public class GUI {
 		gbc_btnSubmit.gridy = 6;
 		guessWindow.add(btnSubmit, gbc_btnSubmit);
 
-
         guessFrame.setMinimumSize(new Dimension(400,350));
         guessFrame.pack();
         guessFrame.setLocationRelativeTo(null);
-
         guessFrame.setVisible(false);
-
 	}
-
 
     /* Guess Actions */
 
     public void unlockButtons() {
-
 		for(int i = 0; i < 20; i++)	{
 
 			tglBtn[i].setEnabled(true);
             guessesMade = new ArrayList<Integer>();
-
 		}
 
 	} // End unlockButtons method
 
     public void lockButtons() {
-
     	for (int i = 0; i < guessesMade.size(); i++) {
 
 			for(int j = 0; j < 20; j++){
@@ -423,7 +403,6 @@ public class GUI {
     } // End lockButtons method
 
     public void untoggleButtons(int num) {
-
 		for(int i = 0; i < 20; i++){
 			if(num != i){
 				tglBtn[i].setSelected(false);
@@ -432,24 +411,17 @@ public class GUI {
     }
 
     public int getGuessNumber() {
-
 		for (int i = 0; i < 20; i++) {
-
 			if (tglBtn[i].isSelected() == true) return i + 1;
-
 		}
-
 		return 0; // If the method hasn't already returned a value by this point, return 0
-
 	}
 
 
     /* Control */
 
     public void switchCard(String cardString) {
-
         card.show(setupMenu.getContentPane(), cardString);
-
     }
 
     public void setAddress(String address) {
@@ -458,19 +430,16 @@ public class GUI {
     }
 
     public void updatePlayerCount(int count /* TODO: replace with method to get number of connected players from the server */) {
-
         for(int i = 0; i < count; i++){
-
             playerConnect[i] = new JLabel("Player " + (i+1) + ": Connected!", SwingConstants.CENTER);
-            
         }
-        if(count == 4){
+        playerConnect[count].setText("Player " + (count+1) + ": Connected!");
+        if((count+1) == 4){
             startBtn.setEnabled(true);
         }
     }
 
     public void updatePlayerTurn(int pNum) {
-        
         if (pNum == Listener.localPlayerNum) {
             turnLbl.setText("<html><h1>It's your turn!</h1></html>");
             makeGuess.setEnabled(true);
@@ -478,11 +447,9 @@ public class GUI {
             turnLbl.setText("<html><h1>It's player " + pNum + "'s turn.</h1></html>");
             makeGuess.setEnabled(false);
         }
-
     }
 
     public void updateScores(int[] scores){
-
         lblPlayer1.setText("Player 1: " + scores[0]);
         lblPlayer2.setText("Player 2: " + scores[1]);
         lblPlayer3.setText("Player 3: " + scores[2]);
@@ -490,7 +457,6 @@ public class GUI {
     }
 
     public void errorWindow(String reason){
-
         JOptionPane.showMessageDialog(null, reason);
     }
 }
