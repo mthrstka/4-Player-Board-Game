@@ -1,21 +1,23 @@
-// import java.net.InetAddress;
+import java.net.InetAddress;
 import java.util.Scanner;
 
+// For testing client connection to server. Remove from final deploy
 public class App {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the server ip: ");
-        String serverIP = "192.168.1.241";
+        String serverIP = "";
+        System.out.print("Enter the server ip: ");
+        System.out.println(serverIP);
         serverIP = sc.next();
-        System.out.println("Enter the server port: ");
         int port = 1234;
-        port = sc.nextInt();
+        System.out.println(port);
         Client client = new Client(serverIP, port);
-        client.sendMessage("Player connected");
-        for(int i=0; i<2; i++) {
-            client.sendMessage(sc.nextLine());
+        client.sendMessage("Player connected from " + InetAddress.getLocalHost());
+        try {
+            client.receiveAllMessages();
+        } catch (Exception e) {
+            System.out.println("No messages to read. ");
+            e.printStackTrace();
         }
-        client.receiveAllMessages();
-        // System.out.println("Enter the ip address: ");
     }
 }
