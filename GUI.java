@@ -21,8 +21,7 @@ public class GUI {
 
     /* Buttons */
     JRadioButton amClientBtn, amServerBtn;
-    JButton continueBtn, startBtn, btnSubmit;
-    JButton makeGuess;
+    JButton continueBtn, startBtn, btnSubmit, makeGuess, connectBtn;
 	JToggleButton[] tglBtn = new JToggleButton[20];
 
     /* Text */
@@ -73,7 +72,6 @@ public class GUI {
         Image newImageRed = imageRed.getScaledInstance(20,20, Image.SCALE_SMOOTH);
         redDot = new ImageIcon(newImageRed);
 
-        GuessFrame();
         setupMenu();
     }
 
@@ -86,7 +84,6 @@ public class GUI {
         setupMenu.setLayout(card);
         setupMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setupMenu.setTitle(title + " - Setup");
-        setupMenu.setSize(500, 500);
 
         for (int i = 0; i < 4; i++){
             playerConnect[i] = new JLabel("Player " + (i+1) + ": Waiting...", SwingConstants.CENTER);
@@ -168,14 +165,25 @@ public class GUI {
 
         JLabel clientLabel = new JLabel("Enter the server address to connect to:", SwingConstants.CENTER);
         addressInputField = new JTextField(30);
+        connectBtn = new JButton("Connect to server");
+        connectBtn.addActionListener(Listener);
 
         JPanel clientPanel1 = new JPanel();
         JPanel clientPanel2 = new JPanel();
         clientPlayerPanel = new JPanel();
         JPanel clientPanel4 = new JPanel();
+        JPanel connectPanel = new JPanel();
+        JPanel inputPanel = new JPanel();
+
+        inputPanel.add(addressInputField);
+        connectPanel.add(connectBtn);
+
+        clientPanel2.setLayout(new GridLayout(3, 1));
 
         clientPanel2.add(clientLabel);
-        clientPanel2.add(addressInputField);
+        clientPanel2.add(inputPanel);
+        clientPanel2.add(connectPanel);
+
         clientPlayerPanel.setLayout(new GridLayout(2, 2));
 
         clientPanel1.setLayout(new GridLayout(2, 1));
@@ -190,6 +198,11 @@ public class GUI {
         setupMenu.add(cServer, "server");
         setupMenu.add(cClient, "client");
 
+
+        setupMenu.pack();
+        setupMenu.setMinimumSize(new Dimension(500,500));
+        setupMenu.setLocationRelativeTo(null);
+
         setupMenu.setVisible(true);
 
         amServerBtn.addActionListener(Listener);
@@ -201,11 +214,9 @@ public class GUI {
     public void gameHome(){
         
         gameHome = new JFrame();
-        gameHome.setSize(500,500);
         gameHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameHome.setTitle(title);
         gameHome.setLayout(new BorderLayout());
-        gameHome.getContentPane().setBackground(setupMenu.getContentPane().getBackground());      //Work-around for background color issue.
 
        makeGuess = new JButton("Make guess");
        JPanel gameBoard = new JPanel();
@@ -297,17 +308,25 @@ public class GUI {
         boardBottom.add(makeGuess);
         gameHome.add(boardBottom, BorderLayout.SOUTH);
 
+
+        gameHome.pack();
+        gameHome.setLocation(setupMenu.getX(), setupMenu.getY());
+        gameHome.setMinimumSize(new Dimension(500,500));
+
        gameHome.setVisible(true);
+
+       GuessFrame(); // Creates GuessFrame, but not visible till needed
 
     }
 
     public void GuessFrame() {
 
 		guessFrame = new JFrame();
+
 		guessFrame.setTitle("Number Selecter");
         guessFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		guessFrame.setBounds(100, 100, 435, 282);
-        guessFrame.setSize(400,350);
+
 		JPanel guessWindow;
 		guessWindow = new JPanel();
 		guessWindow.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -368,6 +387,11 @@ public class GUI {
 		gbc_btnSubmit.gridy = 6;
 		guessWindow.add(btnSubmit, gbc_btnSubmit);
 
+
+        guessFrame.setMinimumSize(new Dimension(400,350));
+        guessFrame.pack();
+        guessFrame.setLocationRelativeTo(null);
+
         guessFrame.setVisible(false);
 
 	}
@@ -380,6 +404,7 @@ public class GUI {
 		for(int i = 0; i < 20; i++)	{
 
 			tglBtn[i].setEnabled(true);
+            guessesMade = new ArrayList<Integer>();
 
 		}
 
@@ -432,14 +457,16 @@ public class GUI {
                 "</h1><br /><p text-align: center;>All other players should join using this address.</p></html>");
     }
 
-    public void updatePlayerCount() {
+    public void updatePlayerCount(int count /* TODO: replace with method to get number of connected players from the server */) {
 
-        for(int i = 0; i < 4 /* TODO: replace with method to get number of connected players from the server */; i++){
+        for(int i = 0; i < count; i++){
 
             playerConnect[i] = new JLabel("Player " + (i+1) + ": Connected!", SwingConstants.CENTER);
             
         }
-
+        if(count == 4){
+            startBtn.setEnabled(true);
+        }
     }
 
     public void updatePlayerTurn(int pNum) {
@@ -460,5 +487,10 @@ public class GUI {
         lblPlayer2.setText("Player 2: " + scores[1]);
         lblPlayer3.setText("Player 3: " + scores[2]);
         lblPlayer4.setText("Player 4: " + scores[3]);
+    }
+
+    public void errorWindow(String reason){
+
+        JOptionPane.showMessageDialog(null, reason);
     }
 }

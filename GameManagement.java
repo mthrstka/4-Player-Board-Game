@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
 import java.util.stream.*;
 import java.util.Arrays;
 
@@ -47,6 +48,7 @@ public class GameManagement implements ActionListener{
         currentTurn = 1;
         playerTurn = 1;
         resetBoard();
+        gui.unlockButtons();
     }
 
     public void setArray(Integer[] Arr) {
@@ -151,6 +153,12 @@ public class GameManagement implements ActionListener{
         if(e.getSource() == gui.makeGuess){
             gui.guessFrame.setVisible(true);
             gui.btnSubmit.setEnabled(false);
+        } else if(e.getSource() == gui.startBtn){
+            gui.gameHome();
+            gui.setupMenu.setVisible(false);
+        }else if(e.getSource() == gui.connectBtn){
+            /* TODO: Add method to connect to server, the following is the in case of no connection case (Could go in the catch part of try/catch) */
+            gui.errorWindow("The server entered could not be connected to. Please check the entered address and try again.");
         } else if(e.getSource() == gui.amClientBtn || e.getSource() == gui.amServerBtn){
             gui.continueBtn.setEnabled(true);
 
@@ -158,13 +166,17 @@ public class GameManagement implements ActionListener{
         
             if(gui.amServerBtn.isSelected()){
 
-                try {
-                    // server = new Server();  // TODO: Old server method, need to fix
-                } catch(Exception error){System.out.println("Server setup failed");}
+                try{
+                    InetAddress hostAddress = InetAddress.getLocalHost();   //TODO: Don't know if this is right, just copied what was in ServerInitializerExample -Michael
+                    server = new Server(hostAddress, 1234); 
+                } catch (Exception error){
+                    System.err.println("Error creating server");
+                }
 
                 gui.switchCard("server");
                 gui.setAddress(server.getAddress());
                 isServer = true;
+                gui.updatePlayerCount(1);
                 
                 for(int i = 0; i < 4; i++){
                     gui.serverPlayerPanel.add(gui.playerConnect[i]);
