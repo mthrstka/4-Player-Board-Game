@@ -9,16 +9,17 @@ public class GameManagement implements ActionListener{
     private Server server;
     private Client client;
     private boolean isServer = false;
-    public static int currentTurn = 1;
+    public int currentTurn = 1;
     public int playerTurn = 1;
     public int roundNum = 1;
     public int[] playerScores = new int[4];
+    public int localPlayerNum = 1;  // TODO: Temporary value for testing, should use actual player number
 
-    public static Boolean playerBl[] = new Boolean[16];
-    public static Integer arrP1[] = new Integer[3];
-    public static Integer arrP2[] = new Integer[3];
-    public static Integer arrP3[] = new Integer[3];
-    public static Integer arrP4[] = new Integer[3];
+    public Boolean playerBl[] = new Boolean[16];
+    public Integer arrP1[] = new Integer[3];
+    public Integer arrP2[] = new Integer[3];
+    public Integer arrP3[] = new Integer[3];
+    public Integer arrP4[] = new Integer[3];
 
     
     public GameManagement() {
@@ -37,6 +38,8 @@ public class GameManagement implements ActionListener{
             playerTurn = 1;
         }
 
+        gui.updatePlayerTurn(currentTurn);
+
     }
 
     public void newRound() {
@@ -46,7 +49,7 @@ public class GameManagement implements ActionListener{
         resetBoard();
     }
 
-    public static void setArray(Integer[] Arr) {
+    public void setArray(Integer[] Arr) {
 		
 		for (int i = 0; i < 3; i++) {
 			
@@ -88,7 +91,7 @@ public class GameManagement implements ActionListener{
     }
     
     //takes int value to represent player and their guess array.
-    public static void checkWin(int player, Integer[] Arr) {
+    public void checkWin(int player, Integer[] Arr) {
     	
     	switch(player) {
     	
@@ -145,7 +148,10 @@ public class GameManagement implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
         
-        if(e.getSource() == gui.amClientBtn || e.getSource() == gui.amServerBtn){
+        if(e.getSource() == gui.makeGuess){
+            gui.guessFrame.setVisible(true);
+            gui.btnSubmit.setEnabled(false);
+        } else if(e.getSource() == gui.amClientBtn || e.getSource() == gui.amServerBtn){
             gui.continueBtn.setEnabled(true);
 
         } else if(e.getSource() == gui.continueBtn){
@@ -201,16 +207,20 @@ public class GameManagement implements ActionListener{
             }
         } else if(e.getSource() == gui.btnSubmit){
 			gui.guess = gui.getGuessNumber();
-			System.out.println(gui.guess);	// TODO: test output, remove later
+            gui.guessesMade.add(gui.guess);
+            gui.lockButtons();
+            gui.tglBtn[gui.guess - 1].setSelected(false);
+            gui.guessFrame.setVisible(false);
+            nextTurn();
 		} else {
             for(int i = 0; i < 20; i++){
                 if(e.getSource() == gui.tglBtn[i]) {
                         gui.untoggleButtons(i);
                         gui.tglBtn[i].setSelected(true);
+                        gui.btnSubmit.setEnabled(true);
                         return;
                 }
             }
-	    }
+	    }        
     }
-    
 }
