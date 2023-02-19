@@ -310,7 +310,7 @@ public class GUI {
 
 
         gameHome.pack();
-        gameHome.setLocationRelativeTo(setupMenu);
+        gameHome.setLocation(setupMenu.getX(), setupMenu.getY());
         gameHome.setMinimumSize(new Dimension(500,500));
 
        gameHome.setVisible(true);
@@ -390,7 +390,7 @@ public class GUI {
 
         guessFrame.setMinimumSize(new Dimension(400,350));
         guessFrame.pack();
-        gameHome.setLocationRelativeTo(null);
+        guessFrame.setLocationRelativeTo(null);
 
         guessFrame.setVisible(false);
 
