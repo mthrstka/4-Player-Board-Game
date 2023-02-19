@@ -29,7 +29,7 @@ public class GUI {
     JLabel[] playerConnect = new JLabel[4];
     JLabel turnLbl;
     JTextField addressInputField;
-    JLabel lblPlayer1, lblPlayer2, lblPlayer3, lblPlayer4;
+    JLabel lblPlayer[] = new JLabel[4];
 
     /* Images */
     ImageIcon blackDot = new ImageIcon("img/black_dot.png");
@@ -147,7 +147,7 @@ public class GUI {
         serverPanel2.add(addressBar);
 
         startBtn = new JButton("Start Game");
-        startBtn.setEnabled(false);
+        startBtn.setEnabled(true);      //TODO: Change this after testing
         serverPanel4.add(startBtn);
 
         serverPanel1.add(serverPanel2);
@@ -218,6 +218,16 @@ public class GUI {
         JPanel gameBoard = new JPanel();
         gameBoard.setLayout(new GridLayout(6,6));
 
+
+        for(int i  = 0; i < 4; i++){
+
+            if(i+1 == Listener.localPlayerNum)
+                lblPlayer[i] = new JLabel("You: 0", SwingConstants.CENTER);
+            else
+                lblPlayer[i] = new JLabel("Player " + (i+1) + ": 0", SwingConstants.CENTER);
+            
+        }
+
         /* Top panel */
 
         JPanel boardTop = new JPanel();
@@ -227,8 +237,7 @@ public class GUI {
         gameHome.add(boardTop, BorderLayout.NORTH);
 
         //first row
-        lblPlayer1 = new JLabel("Player 1: 0", SwingConstants.CENTER);         //lbl for Player1 Scoreby
-       gameBoard.add(lblPlayer1);
+       gameBoard.add(lblPlayer[0]);
 
        JLabel p1 = new JLabel("P1", SwingConstants.CENTER);                  //Column header for game board
        p1.setVerticalAlignment(SwingConstants.BOTTOM);      //Set the position of the text to the bottom
@@ -246,8 +255,7 @@ public class GUI {
        p4.setVerticalAlignment(SwingConstants.BOTTOM);
        gameBoard.add(p4);
       
-       lblPlayer2 = new JLabel("Player 2: 0", SwingConstants.CENTER);         //lbl for Player2 Score
-       gameBoard.add(lblPlayer2);
+       gameBoard.add(lblPlayer[1]);
 
    
         //ROWS 2-5
@@ -282,15 +290,13 @@ public class GUI {
         }
 
         //sixth row
-       lblPlayer3 = new JLabel("Player 3: 0", SwingConstants.CENTER);     //lbl for Player3 score
-       gameBoard.add(lblPlayer3);
+       gameBoard.add(lblPlayer[2]);
        gameBoard.add(new JLabel(""));            //empty Jlabels along the bottom of the GUI
        gameBoard.add(new JLabel(""));
        gameBoard.add(new JLabel(""));
        gameBoard.add(new JLabel(""));
 
-       lblPlayer4 = new JLabel("Player 4: 0", SwingConstants.CENTER);    //lbl for Player 4 score
-       gameBoard.add(lblPlayer4);
+       gameBoard.add(lblPlayer[3]);
        gameHome.add(gameBoard, BorderLayout.CENTER);
 
 
@@ -450,13 +456,21 @@ public class GUI {
     }
 
     public void updateScores(int[] scores){
-        lblPlayer1.setText("Player 1: " + scores[0]);
-        lblPlayer2.setText("Player 2: " + scores[1]);
-        lblPlayer3.setText("Player 3: " + scores[2]);
-        lblPlayer4.setText("Player 4: " + scores[3]);
+
+        for(int i = 0; i < 4; i++){
+
+            if(i+1 == Listener.localPlayerNum)
+                lblPlayer[i].setText("You: " + scores[i]);
+            else
+                lblPlayer[i].setText("Player " + (i+1) + ": " + scores[i]);
+        }
     }
 
     public void errorWindow(String reason){
         JOptionPane.showMessageDialog(null, reason);
+    }
+
+    public void updateGuessesMade(){
+
     }
 }

@@ -10,18 +10,23 @@ public class GameManagement implements ActionListener{
     private Server server;
     private Client client;
     private boolean isServer = false;
-    public int currentTurn = 1;
+    public static int currentTurn = 1;
     public int playerTurn = 1;
-    public int roundNum = 1;
+    public int roundNum = 0;
     public int[] playerScores = new int[4];
     public int localPlayerNum = 1;  // TODO: Temporary value for testing, should use actual player number
 
     public Boolean playerBl[] = new Boolean[16];
+
     public Integer arrP1[] = new Integer[3];
     public Integer arrP2[] = new Integer[3];
     public Integer arrP3[] = new Integer[3];
     public Integer arrP4[] = new Integer[3];
 
+    public Integer guessArrP1[] = new Integer[20];
+    public Integer guessArrP2[] = new Integer[20];
+    public Integer guessArrP3[] = new Integer[20];
+    public Integer guessArrP4[] = new Integer[20];
     
     public GameManagement() {
         gui = new GUI(this);
@@ -36,17 +41,37 @@ public class GameManagement implements ActionListener{
         }
 
         gui.updatePlayerTurn(currentTurn);
+
+        if(isServer){
+            checkWin(1, guessArrP1);
+            checkWin(2, guessArrP2);
+            checkWin(3, guessArrP3);
+            checkWin(4, guessArrP4);
+        }
     }
 
     public void newRound() {
+
         roundNum++;
         currentTurn = 1;
         playerTurn = 1;
         resetBoard();
         gui.unlockButtons();
+
+        if(isServer){
+            server.sendMessage((Object)setArray(arrP1), 1);
+            server.sendMessage((Object)setArray(arrP2), 2);
+            server.sendMessage((Object)setArray(arrP3), 3);
+            server.sendMessage((Object)setArray(arrP4), 4);
+        }
+        
+        if(localPlayerNum == 1) {
+            arrP1 = (Integer[])client.receiveMessage();
+        }
+
     }
 
-    public void setArray(Integer[] Arr) {
+    public Integer[] setArray(Integer[] Arr) {
 		for (int i = 0; i < 3; i++) {
 			//set a temp int from 1-20
 			int temp = (int)(Math.random()*20)+1;
@@ -59,6 +84,9 @@ public class GameManagement implements ActionListener{
 				System.out.print(Arr[i] + " ");
 			}
 		}
+
+        return Arr;
+
     }
 
      public void updateBoard(boolean[] arr) {
@@ -114,12 +142,6 @@ public class GameManagement implements ActionListener{
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP2))) {playerBl[13] = true;}
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP3))) {playerBl[14] = true;}
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP4))) {playerBl[15] = true;}
-                break;
-            }
-
-            case 5: {
-                //reset array on player being set to win? GE
-                
                 break;
             }
     	}

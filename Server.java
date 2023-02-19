@@ -24,6 +24,8 @@ public class Server {
       String serverAddressDisplayed = temp[temp.length-1];
       serverAddressFormatted = serverAddressDisplayed;
       System.out.println("Server started on address: " + serverAddressDisplayed + " port: " + port + ".");
+
+
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -43,7 +45,7 @@ public class Server {
           String[] temp = client.getInetAddress().getHostAddress().split("/");
           String clientAddressDisplayed = temp[temp.length-1];
           clientNum +=1;
-          System.out.println("Player " + clientNum + " as client " + ( (Integer) clients.indexOf(client) + 1) + " connected from " + clientAddressDisplayed + ".");
+          System.out.println("Player " + clientNum + " as client " + ((Integer) clients.indexOf(client) + 1) + " connected from " + clientAddressDisplayed + ".");
           sendMessage("You have connected to " + serverAddressFormatted + ". You are Player: " + clientNum, clientNum);
         }
         // client limit reached, do not accept more clients.
