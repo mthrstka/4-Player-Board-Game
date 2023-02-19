@@ -10,7 +10,7 @@ public class GameManagement implements ActionListener{
     private Server server;
     private Client client;
     private boolean isServer = false;
-    public int currentTurn = 1;
+    public static int currentTurn = 1;
     public int playerTurn = 1;
     public int roundNum = 1;
     public int[] playerScores = new int[4];
