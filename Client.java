@@ -13,7 +13,7 @@ public class Client implements Runnable {
     public int gameStatus;
     public boolean[] grid;
     private String[] messagePieces;
-    GameManagement gm;
+    public GameManagement gm;
 
     // Constructor to initialize socket, in and out streams
     public void setupClient(String ip, int port, GameManagement g) {
@@ -48,7 +48,7 @@ public class Client implements Runnable {
     }
 
     public void sendGuess(int guess, int playerNum) {
-        String msg = guess + " / " + playerNum;
+        String msg = "1 / " + guess + " / " + playerNum;
         sendMessage(msg);
     }
 
@@ -109,10 +109,33 @@ public class Client implements Runnable {
                 case "1":
                     //TODO: handle instructions for non-guessing users. 
                     gm.nextTurn();
-                    if(Integer.parseInt(messagePieces[1]) == gm.localPlayerNum) {
+                    if(Integer.parseInt(messagePieces[2]) == gm.localPlayerNum) {
                         System.out.println("This machine should guess");
                         //TODO: handle guess instructions in GameManagement
                     }
+
+                    if(gm.isServer){
+
+                        if(Integer.parseInt(messagePieces[2]) == 1){
+
+                            gm.guessArrP1[((int)(gm.currentTurn/4) + 3)] = Integer.parseInt(messagePieces[1]);
+
+                        } else if(Integer.parseInt(messagePieces[2]) == 2){
+
+                            gm.guessArrP2[((int)(gm.currentTurn/4) + 3)] = Integer.parseInt(messagePieces[1]);
+                            
+                        } else if(Integer.parseInt(messagePieces[2]) == 3){
+
+                            gm.guessArrP3[((int)(gm.currentTurn/4) + 3)] = Integer.parseInt(messagePieces[1]);
+                            
+                        } else if(Integer.parseInt(messagePieces[2]) == 4){
+
+                            gm.guessArrP4[((int)(gm.currentTurn/4) + 3)] = Integer.parseInt(messagePieces[1]);
+                            
+                        }
+
+                    }
+
                 break;
 
                 case "4":

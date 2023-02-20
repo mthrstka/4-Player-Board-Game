@@ -115,7 +115,7 @@ public class GUI {
         scToggle.add(amClientBtn);
 
         continueBtn = new JButton("Continue");
-        //startGame.setEnabled(false);                 // TODO: Uncomment before release
+        continueBtn.setEnabled(false);                 // TODO: Uncomment before release
 
         p1.add(topTxt);
         p2.add(instructionTxt);
@@ -147,7 +147,7 @@ public class GUI {
         serverPanel2.add(addressBar);
 
         startBtn = new JButton("Start Game");
-        startBtn.setEnabled(true);      //TODO: Change this after testing
+        startBtn.setEnabled(false);      //TODO: Change this after testing
         serverPanel4.add(startBtn);
 
         serverPanel1.add(serverPanel2);
@@ -483,6 +483,7 @@ public class GUI {
     public void updateGuessesMade() {
 
         guessesLbl.setText("Your numbers: " + guessesMade.get(0) + ", " + guessesMade.get(1) + ", " + guessesMade.get(2));
+        lockButtons();
     }
 
     public void win(int player){
