@@ -76,12 +76,23 @@ public class Server {
     }
   }
 
+  public void sendData(int gameStatus, boolean[] gridValues, int currentPlayer, ) {
+
+  }
+
   // Function to remove a client from the array lists
   public void removeClient(Socket client, ObjectOutputStream out) {
     clients.remove(client);
     outputs.remove(out);
     System.out.println("Client disconnected from " + client.getInetAddress().getHostAddress() + ".");
   }
+<<<<<<< Updated upstream
+=======
+
+  public String getAddress() {
+    return serverSocket.getInetAddress().toString();
+  }
+>>>>>>> Stashed changes
 }
 
 // ClientHandler class to handle individual clients
@@ -108,7 +119,9 @@ class ClientHandler implements Runnable {
     Object message = null;
     try {
       while ((message = in.readObject()) != null) {
+        String msg = message.toString();
         System.out.println("Message received from " + client.getInetAddress().getHostAddress() + ": " + message);
+<<<<<<< Updated upstream
         // Handle private messages
         if(message.toString().contains("player")) {
           int sendTo = Integer.parseInt(message.toString().substring(6, 6));
@@ -118,6 +131,14 @@ class ClientHandler implements Runnable {
         else { 
           server.broadcastMessage(message);
         }
+=======
+        int flag = (Integer.parseInt(msg.substring(0,0)));
+          String[] temp = msg.split(" / ");
+           
+
+        }
+        server.broadcastMessage(message);
+>>>>>>> Stashed changes
       }
     } catch (IOException | ClassNotFoundException e) {
       server.removeClient(client, out);

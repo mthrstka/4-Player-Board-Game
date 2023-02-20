@@ -13,6 +13,11 @@ public class GameManagement implements ActionListener{
     public int playerTurn = 1;
     public int roundNum = 1;
     public int[] playerScores = new int[4];
+<<<<<<< Updated upstream
+=======
+    public int localPlayerNum = 1;  // TODO: Temporary value for testing, should use actual player number
+    public int port = 1234;
+>>>>>>> Stashed changes
 
     public static Boolean playerBl[] = new Boolean[16];
     public static Integer arrP1[] = new Integer[3];
@@ -43,6 +48,28 @@ public class GameManagement implements ActionListener{
         roundNum++;
         currentTurn = 1;
         playerTurn = 1;
+<<<<<<< Updated upstream
+=======
+        resetBoard();
+        gui.unlockButtons();
+
+        if(isServer){
+            server.sendMessage((Object)setArray(arrP1), 1);
+            server.sendMessage((Object)setArray(arrP2), 2);
+            server.sendMessage((Object)setArray(arrP3), 3);
+            server.sendMessage((Object)setArray(arrP4), 4);
+        }
+        
+        if(localPlayerNum == 1) {
+            try {
+                arrP1 = (Integer[])client.receiveMessage();
+                System.out.println("arrP1: " + arrP1[0] + " " +  arrP1[1] + " " + arrP1[2]);
+            } catch (Exception e) {
+                // TODO: handle exception
+                System.out.println("did not receive the array properly");
+            }
+        }
+>>>>>>> Stashed changes
     }
 
     public static void setArray(int[] Arr) {
@@ -61,6 +88,10 @@ public class GameManagement implements ActionListener{
 				System.out.print(Arr[i] + " ");
 			}
 		}
+<<<<<<< Updated upstream
+=======
+        return Arr;
+>>>>>>> Stashed changes
     }
 
      public void updateBoard(boolean[] arr){
@@ -148,7 +179,27 @@ public class GameManagement implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
         
+<<<<<<< Updated upstream
         if(e.getSource() == gui.amClientBtn || e.getSource() == gui.amServerBtn){
+=======
+        if(e.getSource() == gui.makeGuess){
+            gui.guessFrame.setVisible(true);
+            gui.btnSubmit.setEnabled(false);
+        } else if(e.getSource() == gui.startBtn){
+            gui.gameHome();
+            gui.setupMenu.setVisible(false);
+        }else if(e.getSource() == gui.connectBtn){
+            /* TODO: Add method to connect to server, the following is the in case of no connection case (Could go in the catch part of try/catch) */
+            try {
+                client = new Client(gui.addressInputField.getText(), port); // 1234 is the default port used in the server
+                /* TODO: Wait for 4 players connected  then call gui.gameHome */
+                System.out.println("client created."); // TODO: remove from product deploy version
+            } catch (Exception e1) {
+                // TODO: handle exception
+                gui.errorWindow("The server entered could not be connected to. Please check the entered address and try again.");
+            }
+        } else if(e.getSource() == gui.amClientBtn || e.getSource() == gui.amServerBtn){
+>>>>>>> Stashed changes
             gui.continueBtn.setEnabled(true);
         }
 
@@ -156,9 +207,19 @@ public class GameManagement implements ActionListener{
         
             if(gui.amServerBtn.isSelected()){
 
+<<<<<<< Updated upstream
                 try {
                     server = new Server();  // TODO: Old server method, need to fix
                 } catch(Exception error){System.out.println("Server setup failed");}
+=======
+                try{
+                    InetAddress hostAddress = InetAddress.getLocalHost(); 
+                    server = new Server(hostAddress, port); 
+                    System.out.println("Server started successfully (full address): " + hostAddress.toString() + " friendly address: " + server.serverAddressFormatted);
+                } catch (Exception error){
+                    System.err.println("Error creating server");
+                }
+>>>>>>> Stashed changes
 
                 gui.card.show(gui.setupMenu.getContentPane(), "server");
                 gui.addressBar.setText("<html><p text-align: center>Your server address is:</p><br /><h1 text-align: center>" + getServerAdress() + 
@@ -172,8 +233,16 @@ public class GameManagement implements ActionListener{
                 Thread ts = new Thread() {
                     public void run(){
                         try{
+<<<<<<< Updated upstream
                             server.serverSetup();   // TODO: Old server method, need to fix
                             client.clientSetup();   // TODO: Old client method, need to fix
+=======
+                            while(server.clientNum < 1) {
+                                server.acceptConnection();
+                                System.out.println("clientNum: " + server.clientNum); //remove from final production version
+                                gui.updatePlayerCount(server.clientNum - 1);
+                            }
+>>>>>>> Stashed changes
                         } catch(Exception e){
                             System.out.println("Server setup failed");
                         }
@@ -190,6 +259,7 @@ public class GameManagement implements ActionListener{
                 gui.clientPlayerPanel.add(gui.p3Connect);
                 gui.clientPlayerPanel.add(gui.p4Connect);
 
+<<<<<<< Updated upstream
                 Thread tc = new Thread() {
                     public void run(){
                         try{
@@ -201,6 +271,8 @@ public class GameManagement implements ActionListener{
                 };
 
                 tc.start();
+=======
+>>>>>>> Stashed changes
             } else{
                 gui.setupMenu.setVisible(false);
                 gui.gameHome();

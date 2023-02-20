@@ -69,4 +69,17 @@ public class Client {
             e.printStackTrace();
         }
     }
+
+    // Function to handle incoming messages from the server
+    public void run() {
+        Object message = null;
+        try {
+          while ((message = in.readObject()) != null) {
+            String msg = message.toString();
+            System.out.println("" + msg);
+          }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }
