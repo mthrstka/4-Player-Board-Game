@@ -6,8 +6,6 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URL;
-import java.net.spi.InetAddressResolver;
 import java.util.ArrayList;
 
 public class Server {
@@ -35,24 +33,6 @@ public class Server {
     }
   }
 
-  public static String getIp() throws Exception {
-    URL whatismyip = new URL("http://checkip.amazonaws.com");
-    BufferedReader in = null;
-    try {
-        in = new BufferedReader(new InputStreamReader(
-                whatismyip.openStream()));
-        String ip = in.readLine();
-        return ip;
-    } finally {
-        if (in != null) {
-            try {
-                in.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        };
-    }
-}
   // Function to accept incoming client connections
   public void acceptConnection() {
     try {
@@ -112,8 +92,8 @@ public class Server {
   public String getAddress() {
     return serverSocket.getInetAddress().toString();
   }
-
 }
+
 
 // ClientHandler class to handle individual clients
 class ClientHandler implements Runnable {
@@ -140,15 +120,7 @@ class ClientHandler implements Runnable {
     try {
       while ((message = in.readObject()) != null) {
         System.out.println("Message received from " + client.getInetAddress().getHostAddress() + ": " + message);
-        // // Handle private messages
-        // if(message.toString().contains("player")) {
-        //   int sendTo = Integer.parseInt(message.toString().substring(6, 6));
-        //   server.sendMessage(message.toString().substring(9), sendTo);
-        // }
-        // Handle public messages
-        // else { 
           server.broadcastMessage(message);
-        // }
       }
     } catch (IOException | ClassNotFoundException e) {
       server.removeClient(client, out);

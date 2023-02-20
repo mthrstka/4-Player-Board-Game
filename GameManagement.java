@@ -14,7 +14,8 @@ public class GameManagement implements ActionListener{
     public int playerTurn = 1;
     public int roundNum = 0;
     public int[] playerScores = new int[4];
-    public int localPlayerNum = 1;  // TODO: Temporary value for testing, should use actual player number
+    public int localPlayerNum = 0;  
+    public int port = 1234; 
 
     public Boolean playerBl[] = new Boolean[16];
 
@@ -190,20 +191,15 @@ public class GameManagement implements ActionListener{
             gui.gameHome();
             gui.setupMenu.setVisible(false);
         }else if(e.getSource() == gui.connectBtn){
-            /* TODO: Add method to connect to server, the following is the in case of no connection case (Could go in the catch part of try/catch) */
             try {
-
                 Thread tc = new Thread() {
                     public void run(){ 
-                        client = new Client(gui.addressInputField.getText(), 1234);
+                        client = new Client(gui.addressInputField.getText(), port);
                     }
                 };
-
                 gui.connectBtn.setEnabled(false);
-
                 tc.start();
 
-                System.out.println("client created."); // TODO: remove from product deploy version
             } catch (Exception e1) {
                 // TODO: handle exception
                 gui.errorWindow("The server entered could not be connected to. Please check the entered address and try again.");
@@ -218,7 +214,7 @@ public class GameManagement implements ActionListener{
 
                 try{
                     InetAddress hostAddress = InetAddress.getLocalHost(); 
-                    server = new Server(hostAddress, 1234); 
+                    server = new Server(hostAddress, port); 
                     System.out.println("Server started successfully (full address): " + hostAddress.toString() + " friendly address: " + server.serverAddressFormatted);
                 } catch (Exception error){
                     System.err.println("Error creating server");
@@ -250,7 +246,7 @@ public class GameManagement implements ActionListener{
 
                 Thread tc = new Thread() {
                     public void run(){ 
-                        client = new Client(server.serverAddressFormatted, 1234);
+                        client = new Client(server.serverAddressFormatted, port);
                     }
                 };
 

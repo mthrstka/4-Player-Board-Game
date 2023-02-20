@@ -8,6 +8,10 @@ public class Client {
     private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
+    public int gameStatus;
+    public int playerIndex;
+    public boolean[] grid;
+    private String[] messagePieces;
 
     // Constructor to initialize socket, in and out streams
     public Client(String ip, int port) {
@@ -61,6 +65,61 @@ public class Client {
             while (message != null) {
                 System.out.println("Message Received: " + message);
                 message = in.readObject();
+            }
+            try {
+                messagePieces = (message.toString()).split(" / ");
+            } catch (Exception e) {
+                // TODO: handle exception
+                System.out.println("Message didn't contain /. Message: " + message.toString());
+            }
+            String status = ((String) message).substring(0, 1);
+            switch(status) {
+                //new match
+                case "2":   
+                    //TODO: start new match, set turn to player1, update initial arrays
+                    System.out.println("All machines should get a fresh gamegrid and update the scores and their initial arrays");
+                break;
+
+                //game over
+                case "3":
+                    //TODO: Display winner in the turn label, disable buttons and close the connections on dispose. 
+                    System.out.println("Game over, display final scores and let the player exit the GUI");
+                break;
+
+                //starting game messages
+                case "0": 
+                    //set player value
+                    try {
+                        if(Integer.parseInt(messagePieces[1]) > 0 && Integer.parseInt(messagePieces[1]) <= 4) {
+                            //playerIndex = Integer.parseInt(messagePieces[0]);
+                        }
+                    } catch (Exception e) {
+                        System.out.println("The message was not an integer value: " + messagePieces[1] + " full message: " + message);
+                    }
+                break;
+
+                //match in progress
+                case "1":
+                    if(Integer.parseInt(messagePieces[2]) == playerIndex) {
+                        System.out.println("This machine should guess");
+                        //TODO: handle guess instructions in GameManagement
+                        
+                    } else {
+                        //TODO: update the board grid
+                        System.out.println("Updating grid: ");
+                        grid = new boolean[16];
+                        String[] tempArr = messagePieces[1].split(" , ");
+                        for(int i = 0; i < 16; i++) {
+                            if (tempArr.equals("true")) {
+                                grid[i] = true;
+                            } else {
+                                grid[i] = false;
+                            }
+                            System.out.print(grid[i]);
+                        }
+                    }
+                break;
+                
             }
         } catch (EOFException e) {
             System.out.println("No more messages to read currently...");
