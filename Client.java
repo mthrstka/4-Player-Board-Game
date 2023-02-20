@@ -107,24 +107,11 @@ public class Client implements Runnable {
 
                 //match in progress
                 case "1":
+                    //TODO: handle instructions for non-guessing users. 
+                    gm.nextTurn();
                     if(Integer.parseInt(messagePieces[1]) == gm.localPlayerNum) {
                         System.out.println("This machine should guess");
-                        gm.nextTurn();
                         //TODO: handle guess instructions in GameManagement
-                        
-                    } else {
-                        //TODO: update the board grid
-                        System.out.println("Updating grid: ");
-                        grid = new boolean[16];
-                        String[] tempArr = messagePieces[1].split(" , ");
-                        for(int i = 0; i < 16; i++) {
-                            if (tempArr.equals("true")) {
-                                grid[i] = true;
-                            } else {
-                                grid[i] = false;
-                            }
-                            System.out.print(grid[i]);
-                        }
                     }
                 break;
 
@@ -142,8 +129,22 @@ public class Client implements Runnable {
                     gm.gui.updatePlayerCount(Integer.parseInt(messagePieces[1]));
                 break;
 
+                //case to update board array
                 case "6":
-                System.out.println("If this works...");
+                    // parse the string input into a boolean array
+                    System.out.println("Updating grid: ");
+                    grid = new boolean[16];
+                    String[] tempArr = messagePieces[1].split(" ");
+                    for(int i = 0; i < 16; i++) {
+                        if (tempArr.equals("true")) {
+                            grid[i] = true;
+                        } else {
+                            grid[i] = false;
+                        }
+                        System.out.print(grid[i]);
+                    }
+                    //update the board grid
+                    gm.updateBoard(grid);
             }
         }
   }

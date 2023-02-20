@@ -40,10 +40,10 @@ public class Server {
           clients.add(client);
           ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
           outputs.add(out);
-          // ClientHandler handler = new ClientHandler(client, this);
-          // new Thread(handler).start();
+          ClientHandler handler = new ClientHandler(client, this);
+          new Thread(handler).start();
           String[] temp = client.getInetAddress().getHostAddress().split("/");
-          String clientAddressDisplayed = temp[temp.length-1];
+          //String clientAddressDisplayed = temp[temp.length-1];
           clientNum +=1;
           //System.out.println("Player " + clientNum + " as client " + ((Integer) clients.indexOf(client) + 1) + " connected from " + clientAddressDisplayed + ".");
         }

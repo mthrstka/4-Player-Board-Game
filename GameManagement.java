@@ -40,7 +40,7 @@ public class GameManagement implements ActionListener{
             playerTurn = 1;
         }
 
-        gui.updatePlayerTurn(currentTurn);
+        gui.updatePlayerTurn(playerTurn);
 
         if(isServer){
             checkWin(1, guessArrP1);
@@ -48,6 +48,16 @@ public class GameManagement implements ActionListener{
             checkWin(3, guessArrP3);
             checkWin(4, guessArrP4);
         }
+    }
+
+    
+    public String formattedBool(boolean[] boolArr) {
+        String formattedBool = "";
+        for (boolean b : boolArr) {
+            formattedBool = formattedBool + b + " ";
+        }
+        client.sendMessage("6 / " + formattedBool.trim());
+        return formattedBool;
     }
 
     public void newRound(int Winner) {
@@ -194,7 +204,7 @@ public class GameManagement implements ActionListener{
                 String address = gui.addressInputField.getText();
 
                 if(address.equals(""))
-                    address = "127.0.0.1";
+                    address = "192.168.1.232";
 
                 client = new Client();
 
