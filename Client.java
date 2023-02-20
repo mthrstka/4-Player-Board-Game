@@ -4,7 +4,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class Client {
+public class Client implements Runnable {
     private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
@@ -21,7 +21,7 @@ public class Client {
             in = new ObjectInputStream(socket.getInputStream());
             System.out.println("Connected to server.");
             try {
-                receiveAllMessages();
+                
             } catch (Exception e) {
                 System.out.println("No messages remaining.");
             }
@@ -57,15 +57,11 @@ public class Client {
         return message;
     }
 
-    //Function to receive all messages from the server
-    public void receiveAllMessages() {
-        try {
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-            Object message = in.readObject();
-            while (message != null) {
-                System.out.println("Message Received: " + message);
-                message = in.readObject();
-            }
+    // Function to handle incoming messages from the client
+  public void run() {
+    Object message = null;
+    try {
+        while ((message = in.readObject()) != null) {
             try {
                 messagePieces = (message.toString()).split(" / ");
             } catch (Exception e) {
@@ -91,7 +87,7 @@ public class Client {
                     //set player value
                     try {
                         if(Integer.parseInt(messagePieces[1]) > 0 && Integer.parseInt(messagePieces[1]) <= 4) {
-                            //playerIndex = Integer.parseInt(messagePieces[0]);
+                            playerIndex = Integer.parseInt(messagePieces[0]);
                         }
                     } catch (Exception e) {
                         System.out.println("The message was not an integer value: " + messagePieces[1] + " full message: " + message);
@@ -119,14 +115,12 @@ public class Client {
                         }
                     }
                 break;
-                
             }
-        } catch (EOFException e) {
-            System.out.println("No more messages to read currently...");
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("There was an error reading the messages. ");
         }
+    } catch (IOException | ClassNotFoundException e) {
+        // no more messages to read.
     }
+  }
     
     // Function to close the socket connection
     public void closeConnection() {

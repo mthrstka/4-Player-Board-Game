@@ -249,8 +249,10 @@ public class GameManagement implements ActionListener{
                         client = new Client(server.serverAddressFormatted, port);
                     }
                 };
-
                 tc.start();
+
+
+                
 
             } else if(gui.amClientBtn.isSelected()){
 
