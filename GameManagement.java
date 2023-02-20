@@ -16,7 +16,11 @@ public class GameManagement implements ActionListener{
 <<<<<<< Updated upstream
 =======
     public int localPlayerNum = 1;  // TODO: Temporary value for testing, should use actual player number
+<<<<<<< Updated upstream
     public int port = 1234;
+>>>>>>> Stashed changes
+=======
+    public int port = 1234; // the default port used for the host and client. 
 >>>>>>> Stashed changes
 
     public static Boolean playerBl[] = new Boolean[16];
@@ -173,8 +177,14 @@ public class GameManagement implements ActionListener{
     	
     }
 
+<<<<<<< Updated upstream
     public String getServerAdress() {
         return server.getLocalAddress();    // TODO: Old server method, need to fix
+=======
+        server.broadcastMessage("2");
+        newRound(player);
+
+>>>>>>> Stashed changes
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -189,13 +199,26 @@ public class GameManagement implements ActionListener{
             gui.gameHome();
             gui.setupMenu.setVisible(false);
         }else if(e.getSource() == gui.connectBtn){
-            /* TODO: Add method to connect to server, the following is the in case of no connection case (Could go in the catch part of try/catch) */
+            // Create a client thread and connect to the server.
             try {
+<<<<<<< Updated upstream
                 client = new Client(gui.addressInputField.getText(), port); // 1234 is the default port used in the server
                 /* TODO: Wait for 4 players connected  then call gui.gameHome */
+=======
+
+                Thread tc = new Thread() {
+                    public void run(){ 
+                        client = new Client(gui.addressInputField.getText(), port);
+                    }
+                };
+                gui.connectBtn.setEnabled(false);
+                localPlayerNum = client.playerIndex;
+
+                tc.start();
+
+>>>>>>> Stashed changes
                 System.out.println("client created."); // TODO: remove from product deploy version
             } catch (Exception e1) {
-                // TODO: handle exception
                 gui.errorWindow("The server entered could not be connected to. Please check the entered address and try again.");
             }
         } else if(e.getSource() == gui.amClientBtn || e.getSource() == gui.amServerBtn){
@@ -261,12 +284,17 @@ public class GameManagement implements ActionListener{
 
 <<<<<<< Updated upstream
                 Thread tc = new Thread() {
+<<<<<<< Updated upstream
                     public void run(){
                         try{
                             client.clientSetup();   // TODO: Old client method, need to fix
                         }catch(Exception e){
                             System.out.println("Client setup failed");
                         }
+=======
+                    public void run(){ 
+                        client = new Client(server.serverAddressFormatted, port);
+>>>>>>> Stashed changes
                     }
                 };
 

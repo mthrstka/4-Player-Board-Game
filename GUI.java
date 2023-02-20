@@ -61,6 +61,7 @@ public class GUI extends JFrame {
         setupMenu();
     }
 
+<<<<<<< Updated upstream
 
     public void gameHome(){
 
@@ -141,6 +142,9 @@ public class GUI extends JFrame {
        gameHome.setVisible(true);
 
     }
+=======
+    /* Frames */
+>>>>>>> Stashed changes
 
     public void setupMenu() {
 
@@ -183,7 +187,10 @@ public class GUI extends JFrame {
         scToggle.add(amClientBtn);
 
         continueBtn = new JButton("Continue");
+<<<<<<< Updated upstream
         //startGame.setEnabled(false);                 // TODO: Uncomment before Monday
+=======
+>>>>>>> Stashed changes
 
         p1.add(topTxt);
         p2.add(instructionTxt);
@@ -261,4 +268,288 @@ public class GUI extends JFrame {
         continueBtn.addActionListener(Listener);
         startBtn.addActionListener(Listener);
     }
+<<<<<<< Updated upstream
+=======
+
+    public void gameHome(){
+        gameHome = new JFrame();
+        gameHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameHome.setTitle(title);
+        gameHome.setLayout(new BorderLayout());
+
+        makeGuess = new JButton("Make guess");
+        JPanel gameBoard = new JPanel();
+        gameBoard.setLayout(new GridLayout(6,6));
+
+
+        for(int i  = 0; i < 4; i++){
+
+            if(i+1 == Listener.localPlayerNum)
+                lblPlayer[i] = new JLabel("You: 0", SwingConstants.CENTER);
+            else
+                lblPlayer[i] = new JLabel("Player " + (i+1) + ": 0", SwingConstants.CENTER);
+            
+        }
+
+        /* Top panel */
+
+        JPanel boardTop = new JPanel();
+        turnLbl = new JLabel("", SwingConstants.CENTER);
+        updatePlayerTurn(1);
+        boardTop.add(turnLbl);
+        gameHome.add(boardTop, BorderLayout.NORTH);
+
+        //first row
+       gameBoard.add(lblPlayer[0]);
+
+       JLabel p1 = new JLabel("P1", SwingConstants.CENTER);                  //Column header for game board
+       p1.setVerticalAlignment(SwingConstants.BOTTOM);      //Set the position of the text to the bottom
+       gameBoard.add(p1);
+
+       JLabel p2 = new JLabel("P2", SwingConstants.CENTER);
+       p2.setVerticalAlignment(SwingConstants.BOTTOM);
+       gameBoard.add(p2);
+
+       JLabel p3 = new JLabel("P3", SwingConstants.CENTER);
+       p3.setVerticalAlignment(SwingConstants.BOTTOM);
+       gameBoard.add(p3);
+
+       JLabel p4 = new JLabel("P4", SwingConstants.CENTER);
+       p4.setVerticalAlignment(SwingConstants.BOTTOM);
+       gameBoard.add(p4);
+      
+       gameBoard.add(lblPlayer[1]);
+
+   
+        //ROWS 2-5
+        int count = 1;
+        int arrIndex = 0;
+        for(int i = 0; i < 24; i++){
+            if(i%6 == 0){
+                JLabel lbl = new JLabel("P" + Integer.toString(count), SwingConstants.RIGHT);
+                count++;
+                gameBoard.add(lbl);
+                continue;
+            } else if(i%6 == 5){
+                JLabel lbl = new JLabel("");
+                gameBoard.add(lbl);
+                continue;
+            } else {
+                if(arrIndex%5 == 0){
+                JLabel lbl = new JLabel(blackDot);
+                lblArr[arrIndex] = lbl;
+                arrIndex++;
+                gameBoard.add(lbl);
+                continue;
+
+                } else {
+                JLabel lbl = new JLabel(redDot);
+                lblArr[arrIndex] = lbl;
+                arrIndex++;
+                gameBoard.add(lbl);
+                continue;
+                }
+            }
+        }
+
+        //sixth row
+       gameBoard.add(lblPlayer[2]);
+       gameBoard.add(new JLabel(""));            //empty Jlabels along the bottom of the GUI
+       gameBoard.add(new JLabel(""));
+       gameBoard.add(new JLabel(""));
+       gameBoard.add(new JLabel(""));
+
+       gameBoard.add(lblPlayer[3]);
+       gameHome.add(gameBoard, BorderLayout.CENTER);
+
+
+        /* Bottom Panel */
+
+        JPanel boardBottom = new JPanel();
+        boardBottom.setLayout(new GridLayout(2, 1));
+
+        boardBottom.add(guessesLbl);
+
+        JPanel bottomBtnPnl = new JPanel();
+        bottomBtnPnl.add(makeGuess);
+        
+        makeGuess.addActionListener(Listener);
+        boardBottom.add(bottomBtnPnl);
+        gameHome.add(boardBottom, BorderLayout.SOUTH);
+
+
+        gameHome.pack();
+        gameHome.setLocation(setupMenu.getX(), setupMenu.getY());
+        gameHome.setMinimumSize(new Dimension(500,500));
+        gameHome.setVisible(true);
+
+       GuessFrame(); // Creates GuessFrame, but not visible till needed
+
+    }
+
+    public void GuessFrame() {
+		guessFrame = new JFrame();
+
+		guessFrame.setTitle("Number Selecter");
+        guessFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		guessFrame.setBounds(100, 100, 435, 282);
+
+		JPanel guessWindow;
+		guessWindow = new JPanel();
+		guessWindow.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		guessFrame.setContentPane(guessWindow);
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[] {60, 60, 60, 60, 60};
+		gbl_contentPane.rowHeights = new int[] {0, 0, 0, 0, 0, 50, 0, 0};
+		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		guessWindow.setLayout(gbl_contentPane);
+
+		JLabel lblInstructions = new JLabel("Please select your guess number.");
+		lblInstructions.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_lblInstructions = new GridBagConstraints();
+		gbc_lblInstructions.insets = new Insets(0, 0, 5, 0);
+		gbc_lblInstructions.gridwidth = 5;
+		gbc_lblInstructions.gridx = 0;
+		gbc_lblInstructions.gridy = 0;
+		guessWindow.add(lblInstructions, gbc_lblInstructions);
+
+		GridBagConstraints[] gbc_tglBtn = new GridBagConstraints[20];
+
+		for(int i = 0; i < 20; i++){
+			tglBtn[i] = new JToggleButton((i + 1) + "");
+			tglBtn[i].setFont(new Font("Tahoma", Font.PLAIN, 15));
+			gbc_tglBtn[i] = new GridBagConstraints();
+			gbc_tglBtn[i].fill = GridBagConstraints.BOTH;
+			gbc_tglBtn[i].insets = new Insets(0, 0, 5, 5);
+			gbc_tglBtn[i].gridx = i % 5;
+
+			int yPos;
+
+			if(i < 5)
+				yPos = 1;
+			else if(i < 10)
+				yPos = 2;
+			else if(i < 15)
+				yPos = 3;
+			else
+				yPos = 4;
+
+			gbc_tglBtn[i].gridy = yPos;
+			guessWindow.add(tglBtn[i], gbc_tglBtn[i]);
+			tglBtn[i].addActionListener(Listener);
+		}
+
+		btnSubmit = new JButton("Submit");
+		btnSubmit.addActionListener(Listener);
+		
+		btnSubmit.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
+		gbc_btnSubmit.gridwidth = 3;
+		gbc_btnSubmit.insets = new Insets(0, 0, 0, 5);
+		gbc_btnSubmit.gridx = 1;
+		gbc_btnSubmit.gridy = 6;
+		guessWindow.add(btnSubmit, gbc_btnSubmit);
+
+        guessFrame.setMinimumSize(new Dimension(400,350));
+        guessFrame.pack();
+        guessFrame.setLocationRelativeTo(null);
+        guessFrame.setVisible(false);
+	}
+
+    /* Guess Actions */
+
+    public void unlockButtons() {
+		for(int i = 0; i < 20; i++)	{
+
+			tglBtn[i].setEnabled(true);
+            guessesMade = new ArrayList<Integer>();
+		}
+
+	} // End unlockButtons method
+
+    public void lockButtons() {
+    	for (int i = 0; i < guessesMade.size(); i++) {
+
+			for(int j = 0; j < 20; j++){
+				if(guessesMade.get(i)-1 == j){
+					tglBtn[j].setEnabled(false);
+				}
+			}
+    	} // End for loop
+    } // End lockButtons method
+
+    public void untoggleButtons(int num) {
+		for(int i = 0; i < 20; i++){
+			if(num != i){
+				tglBtn[i].setSelected(false);
+			}
+		}
+    }
+
+    public int getGuessNumber() {
+		for (int i = 0; i < 20; i++) {
+			if (tglBtn[i].isSelected() == true) return i + 1;
+		}
+		return 0; // If the method hasn't already returned a value by this point, return 0
+	}
+
+
+    /* Control */
+
+    public void switchCard(String cardString) {
+        card.show(setupMenu.getContentPane(), cardString);
+    }
+
+    public void setAddress(String address) {
+        addressBar.setText("<html><p text-align: center>Your server address is:</p><br /><h1 text-align: center>" + address +
+                "</h1><br /><p text-align: center;>All other players should join using this address.</p></html>");
+    }
+
+    public void updatePlayerCount(int count) {
+        for(int i = 0; i < count; i++){
+            playerConnect[i] = new JLabel("Player " + (i+1) + ": Connected!", SwingConstants.CENTER);
+        }
+        playerConnect[count].setText("Player " + (count+1) + ": Connected!");
+        if((count+1) == 4){
+            startBtn.setEnabled(true);
+        }
+    }
+
+    public void updatePlayerTurn(int pNum) {
+        if (pNum == Listener.localPlayerNum) {
+            turnLbl.setText("<html><h1>It's your turn!</h1></html>");
+            makeGuess.setEnabled(true);
+        } else {
+            turnLbl.setText("<html><h1>It's player " + pNum + "'s turn.</h1></html>");
+            makeGuess.setEnabled(false);
+        }
+    }
+
+    public void updateScores(int[] scores){
+
+        for(int i = 0; i < 4; i++){
+
+            if(i+1 == Listener.localPlayerNum)
+                lblPlayer[i].setText("You: " + scores[i]);
+            else
+                lblPlayer[i].setText("Player " + (i+1) + ": " + scores[i]);
+        }
+    }
+
+    public void errorWindow(String reason){
+        JOptionPane.showMessageDialog(null, reason);
+    }
+
+    public void updateGuessesMade(Integer[] arr) {
+
+        guessesLbl.setText("Your numbers: " + arr[0] + ", " + arr[1] + ", " + arr[2]);
+    }
+
+    public void win(int player){
+        turnLbl.setText("Player " + player + " wins!");
+    }
+
+>>>>>>> Stashed changes
 }

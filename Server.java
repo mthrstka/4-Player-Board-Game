@@ -44,7 +44,13 @@ public class Server {
           String[] temp = client.getInetAddress().getHostAddress().split("/");
           String clientAddressDisplayed = temp[temp.length-1];
           clientNum +=1;
+<<<<<<< Updated upstream
           System.out.println("Client " + clients.indexOf(client)+1 + "connected from " + clientAddressDisplayed + ".");
+=======
+          System.out.println("Player " + clientNum + " as client " + ((Integer) clients.indexOf(client) + 1) + " connected from " + clientAddressDisplayed + ".");
+          sendMessage(clientNum, clientNum);
+          sendMessage("You have connected to " + serverAddressFormatted + ". You are Player: " + clientNum, clientNum);
+>>>>>>> Stashed changes
         }
       }
     } catch (IOException e) {
@@ -76,8 +82,18 @@ public class Server {
     }
   }
 
+<<<<<<< Updated upstream
   public void sendData(int gameStatus, boolean[] gridValues, int currentPlayer, ) {
 
+=======
+  public void sendData(int gameStatus, boolean[] gridValues, int currentPlayer) {
+    String temp = "";
+    for (boolean b : gridValues) {
+      temp = temp + b + " ";
+    }
+    String msg = ("" + gameStatus + " / " + temp + "/ " + "");
+    broadcastMessage(msg);
+>>>>>>> Stashed changes
   }
 
   // Function to remove a client from the array lists
@@ -92,6 +108,9 @@ public class Server {
   public String getAddress() {
     return serverSocket.getInetAddress().toString();
   }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }
 
@@ -122,6 +141,7 @@ class ClientHandler implements Runnable {
         String msg = message.toString();
         System.out.println("Message received from " + client.getInetAddress().getHostAddress() + ": " + message);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // Handle private messages
         if(message.toString().contains("player")) {
           int sendTo = Integer.parseInt(message.toString().substring(6, 6));
@@ -139,7 +159,17 @@ class ClientHandler implements Runnable {
         }
         server.broadcastMessage(message);
 >>>>>>> Stashed changes
+=======
+        int flag = (Integer.parseInt(msg.substring(0,1)));
+        
+        String[] temp = msg.split(" / ");
+        for (String string : temp) {
+          System.out.println(string);
+        }
+
+>>>>>>> Stashed changes
       }
+      //server.broadcastMessage(message);
     } catch (IOException | ClassNotFoundException e) {
       server.removeClient(client, out);
     }
