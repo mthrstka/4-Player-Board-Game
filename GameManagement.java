@@ -50,7 +50,7 @@ public class GameManagement implements ActionListener{
         }
     }
 
-    public void newRound() {
+    public void newRound(int Winner) {
 
         roundNum++;
         currentTurn = 1;
@@ -112,12 +112,21 @@ public class GameManagement implements ActionListener{
     
     //takes int value to represent player and their guess array.
     public void checkWin(int player, Integer[] Arr) {
+
     	switch(player) {
             case 1: {
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP1))) {playerBl[0] = true;}
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP2))) {playerBl[1] = true;}
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP3))) {playerBl[2] = true;}
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP4))) {playerBl[3] = true;}
+
+
+                for(int i = 0; i < 4; i++){
+                    if(!playerBl[i]){
+                        return;
+                    }
+                }
+
                 break;	
             }
 
@@ -125,8 +134,15 @@ public class GameManagement implements ActionListener{
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP1))) {playerBl[4] = true;}
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP2))) {playerBl[5] = true;}
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP3))) {playerBl[6] = true;}
-                if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP4))) {playerBl[7] = true;}
-                break;	
+                if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP4))) {playerBl[7] = true;}	
+
+                for(int i = 4; i < 8; i++){
+                    if(!playerBl[i]){
+                        return;
+                    }
+                }
+
+                break;
             }
 
             case 3: {
@@ -134,6 +150,13 @@ public class GameManagement implements ActionListener{
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP2))) {playerBl[9] = true;}
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP3))) {playerBl[10] = true;}
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP4))) {playerBl[11] = true;}
+
+                for(int i = 8; i < 12; i++){
+                    if(!playerBl[i]){
+                        return;
+                    }
+                }
+
                 break;
             }
 
@@ -142,13 +165,24 @@ public class GameManagement implements ActionListener{
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP2))) {playerBl[13] = true;}
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP3))) {playerBl[14] = true;}
                 if(Arrays.asList(Arr).containsAll(Arrays.asList(arrP4))) {playerBl[15] = true;}
+
+                for(int i = 12; i < 16; i++){
+                    if(!playerBl[i]){
+                        return;
+                    }
+                }
+
                 break;
             }
     	}
+
+        server.broadcastMessage("Round over");
+        newRound(player);
+
     }
 
     public void actionPerformed(ActionEvent e) {
-        
+            
         if(e.getSource() == gui.makeGuess){
             gui.guessFrame.setVisible(true);
             gui.btnSubmit.setEnabled(false);
@@ -158,11 +192,22 @@ public class GameManagement implements ActionListener{
         }else if(e.getSource() == gui.connectBtn){
             /* TODO: Add method to connect to server, the following is the in case of no connection case (Could go in the catch part of try/catch) */
             try {
-                client = new Client(gui.addressInputField.getText(), 1234); // 1234 is the default port used in the server
+
+                Thread tc = new Thread() {
+                    public void run(){ 
+                        client = new Client(gui.addressInputField.getText(), 1234);
+                    }
+                };
+
+                gui.connectBtn.setEnabled(false);
+
+                tc.start();
+
                 System.out.println("client created."); // TODO: remove from product deploy version
             } catch (Exception e1) {
                 // TODO: handle exception
                 gui.errorWindow("The server entered could not be connected to. Please check the entered address and try again.");
+                gui.connectBtn.setEnabled(true);
             }
         } else if(e.getSource() == gui.amClientBtn || e.getSource() == gui.amServerBtn){
             gui.continueBtn.setEnabled(true);
@@ -182,7 +227,6 @@ public class GameManagement implements ActionListener{
                 gui.switchCard("server");
                 gui.setAddress(server.serverAddressFormatted);
                 isServer = true;
-                gui.updatePlayerCount(server.clientNum);
                 
                 for(int i = 0; i < 4; i++){
                     gui.serverPlayerPanel.add(gui.playerConnect[i]);
@@ -201,7 +245,16 @@ public class GameManagement implements ActionListener{
                         }
                     }
                 };
+
                 ts.start();
+
+                Thread tc = new Thread() {
+                    public void run(){ 
+                        client = new Client(server.serverAddressFormatted, 1234);
+                    }
+                };
+
+                tc.start();
 
             } else if(gui.amClientBtn.isSelected()){
 
@@ -210,18 +263,7 @@ public class GameManagement implements ActionListener{
                 for(int i = 0; i < 4; i++){
                     gui.clientPlayerPanel.add(gui.playerConnect[i]);
                 }
-
-                Thread tc = new Thread() {
-                    public void run(){
-                        try{
-                            //client = new Client();   // TODO: Old client method, need to fix
-                        }catch(Exception e){
-                            System.out.println("Client setup failed");
-                        }
-                    }
-                };
-                tc.start();
-
+                
             } else{
                 gui.setupMenu.setVisible(false);
                 gui.gameHome();
