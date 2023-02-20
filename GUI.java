@@ -2,7 +2,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 public class GUI {
@@ -30,6 +29,7 @@ public class GUI {
     JLabel turnLbl;
     JTextField addressInputField;
     JLabel lblPlayer[] = new JLabel[4];
+    JLabel guessesLbl;
 
     /* Images */
     ImageIcon blackDot = new ImageIcon("img/black_dot.png");
@@ -115,7 +115,7 @@ public class GUI {
         scToggle.add(amClientBtn);
 
         continueBtn = new JButton("Continue");
-        //startGame.setEnabled(false);                 // TODO: Uncomment before release
+        continueBtn.setEnabled(false);                 // TODO: Uncomment before release
 
         p1.add(topTxt);
         p2.add(instructionTxt);
@@ -147,7 +147,7 @@ public class GUI {
         serverPanel2.add(addressBar);
 
         startBtn = new JButton("Start Game");
-        startBtn.setEnabled(true);      //TODO: Change this after testing
+        startBtn.setEnabled(false);      //TODO: Change this after testing
         serverPanel4.add(startBtn);
 
         serverPanel1.add(serverPanel2);
@@ -298,14 +298,24 @@ public class GUI {
 
        gameBoard.add(lblPlayer[3]);
        gameHome.add(gameBoard, BorderLayout.CENTER);
+       guessesLbl = new JLabel("", SwingConstants.CENTER);
 
 
         /* Bottom Panel */
 
         JPanel boardBottom = new JPanel();
+        boardBottom.setLayout(new GridLayout(2, 1));
+
+        boardBottom.add(guessesLbl);
+
+        JPanel bottomBtnPnl = new JPanel();
+        bottomBtnPnl.add(makeGuess);
+        
         makeGuess.addActionListener(Listener);
-        boardBottom.add(makeGuess);
+        boardBottom.add(bottomBtnPnl);
         gameHome.add(boardBottom, BorderLayout.SOUTH);
+
+
         gameHome.pack();
         gameHome.setLocation(setupMenu.getX(), setupMenu.getY());
         gameHome.setMinimumSize(new Dimension(500,500));
@@ -437,10 +447,10 @@ public class GUI {
 
     public void updatePlayerCount(int count /* TODO: replace with method to get number of connected players from the server */) {
         for(int i = 0; i < count; i++){
-            playerConnect[i] = new JLabel("Player " + (i+1) + ": Connected!", SwingConstants.CENTER);
+            playerConnect[i].setText("Player " + (i+1) + ": Connected!");
         }
-        playerConnect[count].setText("Player " + (count+1) + ": Connected!");
-        if((count+1) == 4){
+        // playerConnect[count - 1].setText("Player " + (count) + ": Connected!");
+        if((count) == 4){
             startBtn.setEnabled(true);
         }
     }
@@ -470,7 +480,14 @@ public class GUI {
         JOptionPane.showMessageDialog(null, reason);
     }
 
-    public void updateGuessesMade(){
+    public void updateGuessesMade() {
 
+        guessesLbl.setText("Your numbers: " + guessesMade.get(0) + ", " + guessesMade.get(1) + ", " + guessesMade.get(2));
+        lockButtons();
     }
+
+    public void win(int player){
+        turnLbl.setText("Player " + player + " wins!");
+    }
+
 }

@@ -12,9 +12,12 @@ public class Server {
   private ArrayList<Socket> clients;
   private ArrayList<ObjectOutputStream> outputs;
   public int clientNum = 0;
+  public GameManagement gm;
+  
 
   // Constructor to initialize server socket and array lists
-  public Server(InetAddress ip, int port) {
+  public Server(InetAddress ip, int port, GameManagement g) {
+    gm = g;
     try {
       serverSocket = new ServerSocket(port, 50, ip);
       clients = new ArrayList<>();
@@ -24,7 +27,6 @@ public class Server {
       String serverAddressDisplayed = temp[temp.length-1];
       serverAddressFormatted = serverAddressDisplayed;
       System.out.println("Server started on address: " + serverAddressDisplayed + " port: " + port + ".");
-
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -40,13 +42,12 @@ public class Server {
           clients.add(client);
           ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
           outputs.add(out);
-          ClientHandler handler = new ClientHandler(client, this);
+          ClientHandler handler = new ClientHandler(client, this, clientNum);
           new Thread(handler).start();
           String[] temp = client.getInetAddress().getHostAddress().split("/");
-          String clientAddressDisplayed = temp[temp.length-1];
+          //String clientAddressDisplayed = temp[temp.length-1];
           clientNum +=1;
-          System.out.println("Player " + clientNum + " as client " + ((Integer) clients.indexOf(client) + 1) + " connected from " + clientAddressDisplayed + ".");
-          sendMessage("You have connected to " + serverAddressFormatted + ". You are Player: " + clientNum, clientNum);
+          //System.out.println("Player " + clientNum + " as client " + ((Integer) clients.indexOf(client) + 1) + " connected from " + clientAddressDisplayed + ".");
         }
         // client limit reached, do not accept more clients.
     } catch (IOException e) {
@@ -72,7 +73,7 @@ public class Server {
       ObjectOutputStream out = outputs.get(playerNumber-1);
       out.writeObject(message);
       out.flush();
-      System.out.println("Message sent to client. (Player " + playerNumber + ")");
+      System.out.println("(Server->client " + playerNumber + ")" + message);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -90,8 +91,8 @@ public class Server {
   public String getAddress() {
     return serverSocket.getInetAddress().toString();
   }
-
 }
+
 
 // ClientHandler class to handle individual clients
 class ClientHandler implements Runnable {
@@ -101,35 +102,26 @@ class ClientHandler implements Runnable {
   private Server server;
 
   // Constructor to initialize client socket, input and output streams, and server
-  public ClientHandler(Socket client, Server server) {
+  public ClientHandler(Socket client, Server server, int num) {
     this.client = client;
     this.server = server;
     try {
-      in = new ObjectInputStream(client.getInputStream());
-      out = new ObjectOutputStream(client.getOutputStream());
+      if(server.gm.localPlayerNum != num)
+        in = new ObjectInputStream(client.getInputStream());
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
-  // Function to handle incoming messages from the client
   public void run() {
     Object message = null;
     try {
       while ((message = in.readObject()) != null) {
-        System.out.println("Message received from " + client.getInetAddress().getHostAddress() + ": " + message);
-        // // Handle private messages
-        // if(message.toString().contains("player")) {
-        //   int sendTo = Integer.parseInt(message.toString().substring(6, 6));
-        //   server.sendMessage(message.toString().substring(9), sendTo);
-        // }
-        // Handle public messages
-        // else { 
+          
           server.broadcastMessage(message);
-        // }
       }
     } catch (IOException | ClassNotFoundException e) {
-      server.removeClient(client, out);
     }
   }
+  // Function to handle incoming messages from the client
 }
