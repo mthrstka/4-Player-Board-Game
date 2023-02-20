@@ -1,9 +1,13 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
+import java.net.spi.InetAddressResolver;
 import java.util.ArrayList;
 
 public class Server {
@@ -31,6 +35,24 @@ public class Server {
     }
   }
 
+  public static String getIp() throws Exception {
+    URL whatismyip = new URL("http://checkip.amazonaws.com");
+    BufferedReader in = null;
+    try {
+        in = new BufferedReader(new InputStreamReader(
+                whatismyip.openStream()));
+        String ip = in.readLine();
+        return ip;
+    } finally {
+        if (in != null) {
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+    }
+}
   // Function to accept incoming client connections
   public void acceptConnection() {
     try {

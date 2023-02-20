@@ -30,6 +30,7 @@ public class GUI {
     JLabel turnLbl;
     JTextField addressInputField;
     JLabel lblPlayer[] = new JLabel[4];
+    JLabel guessesLbl = new JLabel("numbers", SwingConstants.CENTER);
 
     /* Images */
     ImageIcon blackDot = new ImageIcon("img/black_dot.png");
@@ -303,9 +304,18 @@ public class GUI {
         /* Bottom Panel */
 
         JPanel boardBottom = new JPanel();
+        boardBottom.setLayout(new GridLayout(2, 1));
+
+        boardBottom.add(guessesLbl);
+
+        JPanel bottomBtnPnl = new JPanel();
+        bottomBtnPnl.add(makeGuess);
+        
         makeGuess.addActionListener(Listener);
-        boardBottom.add(makeGuess);
+        boardBottom.add(bottomBtnPnl);
         gameHome.add(boardBottom, BorderLayout.SOUTH);
+
+
         gameHome.pack();
         gameHome.setLocation(setupMenu.getX(), setupMenu.getY());
         gameHome.setMinimumSize(new Dimension(500,500));
@@ -470,7 +480,13 @@ public class GUI {
         JOptionPane.showMessageDialog(null, reason);
     }
 
-    public void updateGuessesMade(){
+    public void updateGuessesMade(Integer[] arr) {
 
+        guessesLbl.setText("Your numbers: " + arr[0] + ", " + arr[1] + ", " + arr[2]);
     }
+
+    public void win(int player){
+        turnLbl.setText("Player " + player + " wins!");
+    }
+
 }
