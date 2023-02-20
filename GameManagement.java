@@ -1,15 +1,14 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
-import java.util.stream.*;
 import java.util.Arrays;
 
 public class GameManagement implements ActionListener{
 
-    private GUI gui;
+    public GUI gui;
     private Server server;
     private Client client;
-    private boolean isServer = false;
+    public boolean isServer = false;
     public static int currentTurn = 1;
     public int playerTurn = 1;
     public int roundNum = 0;
@@ -53,6 +52,11 @@ public class GameManagement implements ActionListener{
 
     public void newRound(int Winner) {
 
+        if(Winner == 0){
+            gui.gameHome();
+            gui.setupMenu.setVisible(false);
+        }
+
         roundNum++;
         currentTurn = 1;
         playerTurn = 1;
@@ -60,19 +64,14 @@ public class GameManagement implements ActionListener{
         gui.unlockButtons();
 
         if(isServer){
-            server.sendMessage((Object)setArray(arrP1), 1);
-            server.sendMessage((Object)setArray(arrP2), 2);
-            server.sendMessage((Object)setArray(arrP3), 3);
-            server.sendMessage((Object)setArray(arrP4), 4);
+            server.sendMessage(4 + " / " + (Object)setArray(arrP1), 1);
+            server.sendMessage(4 + " / " + (Object)setArray(arrP2), 2);
+            server.sendMessage(4 + " / " + (Object)setArray(arrP3), 3);
+            server.sendMessage(4 + " / " + (Object)setArray(arrP4), 4);
         }
-        
-        if(localPlayerNum == 1) {
-            arrP1 = (Integer[])client.receiveMessage();
-        }
-
     }
 
-    public Integer[] setArray(Integer[] Arr) {
+    public String setArray(Integer[] Arr) {
 		for (int i = 0; i < 3; i++) {
 			//set a temp int from 1-20
 			int temp = (int)(Math.random()*20)+1;
@@ -82,11 +81,10 @@ public class GameManagement implements ActionListener{
 				i--;
 			} else {
 				Arr[i] = temp;
-				System.out.print(Arr[i] + " ");
 			}
 		}
 
-        return Arr;
+        return Arr[0] + " " + Arr[1] + " " + Arr[2];
 
     }
 
@@ -188,22 +186,32 @@ public class GameManagement implements ActionListener{
             gui.guessFrame.setVisible(true);
             gui.btnSubmit.setEnabled(false);
         } else if(e.getSource() == gui.startBtn){
-            gui.gameHome();
-            gui.setupMenu.setVisible(false);
+            server.broadcastMessage("2 / 0");
         }else if(e.getSource() == gui.connectBtn){
             try {
+                GameManagement gm = this;
+
+                String address = gui.addressInputField.getText();
+
+                if(address.equals(""))
+                    address = "127.0.0.1";
+
+                client = new Client();
+
                 Thread tc = new Thread() {
                     public void run(){ 
-                        client = new Client(gui.addressInputField.getText(), port);
+                        client.setupClient(gui.addressInputField.getText(), port, gm);
                     }
                 };
                 gui.connectBtn.setEnabled(false);
+                gui.addressInputField.setEnabled(false);
                 tc.start();
 
             } catch (Exception e1) {
                 // TODO: handle exception
                 gui.errorWindow("The server entered could not be connected to. Please check the entered address and try again.");
                 gui.connectBtn.setEnabled(true);
+                gui.addressInputField.setEnabled(true);
             }
         } else if(e.getSource() == gui.amClientBtn || e.getSource() == gui.amServerBtn){
             gui.continueBtn.setEnabled(true);
@@ -234,7 +242,8 @@ public class GameManagement implements ActionListener{
                             while(server.clientNum < 4) {
                                 server.acceptConnection();
                                 System.out.println("clientNum: " + server.clientNum); //remove from final production version
-                                gui.updatePlayerCount(server.clientNum - 1);
+                                server.sendMessage("0 / " + server.clientNum, server.clientNum);
+                                server.broadcastMessage("5 / " + server.clientNum);
                             }
                         } catch(Exception e){
                             System.out.println("Server setup failed");
@@ -244,15 +253,16 @@ public class GameManagement implements ActionListener{
 
                 ts.start();
 
+
+                GameManagement gm = this;
+                client = new Client();
+
                 Thread tc = new Thread() {
                     public void run(){ 
-                        client = new Client(server.serverAddressFormatted, port);
+                        client.setupClient(server.serverAddressFormatted, port, gm);
                     }
                 };
-                tc.start();
-
-
-                
+                tc.start();         
 
             } else if(gui.amClientBtn.isSelected()){
 
@@ -273,8 +283,13 @@ public class GameManagement implements ActionListener{
             gui.lockButtons();
             gui.tglBtn[gui.guess - 1].setSelected(false);
             gui.guessFrame.setVisible(false);
-            client.sendGuess(gui.guess, playerTurn);
-            nextTurn();
+            
+            if(isServer){
+                /* TODO: put guess in place */
+                server.broadcastMessage("1 / 2");
+            } else {
+                client.sendGuess(gui.guess, localPlayerNum);
+            }
 
 		} else {
             for(int i = 0; i < 20; i++){
