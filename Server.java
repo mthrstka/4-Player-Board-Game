@@ -12,10 +12,12 @@ public class Server {
   private ArrayList<Socket> clients;
   private ArrayList<ObjectOutputStream> outputs;
   public int clientNum = 0;
+  public GameManagement gm;
   
 
   // Constructor to initialize server socket and array lists
-  public Server(InetAddress ip, int port) {
+  public Server(InetAddress ip, int port, GameManagement g) {
+    gm = g;
     try {
       serverSocket = new ServerSocket(port, 50, ip);
       clients = new ArrayList<>();
@@ -40,7 +42,7 @@ public class Server {
           clients.add(client);
           ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
           outputs.add(out);
-          ClientHandler handler = new ClientHandler(client, this);
+          ClientHandler handler = new ClientHandler(client, this, clientNum);
           new Thread(handler).start();
           String[] temp = client.getInetAddress().getHostAddress().split("/");
           //String clientAddressDisplayed = temp[temp.length-1];
@@ -100,12 +102,12 @@ class ClientHandler implements Runnable {
   private Server server;
 
   // Constructor to initialize client socket, input and output streams, and server
-  public ClientHandler(Socket client, Server server) {
+  public ClientHandler(Socket client, Server server, int num) {
     this.client = client;
     this.server = server;
     try {
-      in = new ObjectInputStream(client.getInputStream());
-      out = new ObjectOutputStream(client.getOutputStream());
+      if(server.gm.localPlayerNum != num)
+        in = new ObjectInputStream(client.getInputStream());
     } catch (IOException e) {
       e.printStackTrace();
     }

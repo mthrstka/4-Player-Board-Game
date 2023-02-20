@@ -9,7 +9,7 @@ public class GameManagement implements ActionListener{
     private Server server;
     private Client client;
     public boolean isServer = false;
-    public static int currentTurn = 1;
+    public int currentTurn = 1;
     public int playerTurn = 1;
     public int roundNum = 0;
     public int[] playerScores = new int[4];
@@ -231,8 +231,9 @@ public class GameManagement implements ActionListener{
             if(gui.amServerBtn.isSelected()){
 
                 try{
-                    InetAddress hostAddress = InetAddress.getLocalHost(); 
-                    server = new Server(hostAddress, port); 
+                    InetAddress hostAddress = InetAddress.getLocalHost();
+                     
+                    server = new Server(hostAddress, port, this); 
                     System.out.println("Server started successfully (full address): " + hostAddress.toString() + " friendly address: " + server.serverAddressFormatted);
                 } catch (Exception error){
                     System.err.println("Error creating server");
@@ -296,7 +297,7 @@ public class GameManagement implements ActionListener{
             
             if(isServer){
                 /* TODO: put guess in place */
-                server.broadcastMessage("1 / 2");
+                server.broadcastMessage("1 / " + gui.guess + " / 1");
             } else {
                 client.sendGuess(gui.guess, localPlayerNum);
             }
