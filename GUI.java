@@ -2,7 +2,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 public class GUI {
@@ -30,7 +29,7 @@ public class GUI {
     JLabel turnLbl;
     JTextField addressInputField;
     JLabel lblPlayer[] = new JLabel[4];
-    JLabel guessesLbl = new JLabel("numbers", SwingConstants.CENTER);
+    JLabel guessesLbl;
 
     /* Images */
     ImageIcon blackDot = new ImageIcon("img/black_dot.png");
@@ -299,6 +298,7 @@ public class GUI {
 
        gameBoard.add(lblPlayer[3]);
        gameHome.add(gameBoard, BorderLayout.CENTER);
+       guessesLbl = new JLabel("", SwingConstants.CENTER);
 
 
         /* Bottom Panel */
@@ -447,10 +447,10 @@ public class GUI {
 
     public void updatePlayerCount(int count /* TODO: replace with method to get number of connected players from the server */) {
         for(int i = 0; i < count; i++){
-            playerConnect[i] = new JLabel("Player " + (i+1) + ": Connected!", SwingConstants.CENTER);
+            playerConnect[i].setText("Player " + (i+1) + ": Connected!");
         }
-        playerConnect[count].setText("Player " + (count+1) + ": Connected!");
-        if((count+1) == 4){
+        // playerConnect[count - 1].setText("Player " + (count) + ": Connected!");
+        if((count) == 4){
             startBtn.setEnabled(true);
         }
     }
@@ -480,9 +480,9 @@ public class GUI {
         JOptionPane.showMessageDialog(null, reason);
     }
 
-    public void updateGuessesMade(Integer[] arr) {
+    public void updateGuessesMade() {
 
-        guessesLbl.setText("Your numbers: " + arr[0] + ", " + arr[1] + ", " + arr[2]);
+        guessesLbl.setText("Your numbers: " + guessesMade.get(0) + ", " + guessesMade.get(1) + ", " + guessesMade.get(2));
     }
 
     public void win(int player){

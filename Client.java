@@ -1,29 +1,36 @@
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Scanner;
+
+import javax.swing.plaf.synth.SynthSeparatorUI;
 
 public class Client implements Runnable {
     private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
     public int gameStatus;
-    public int playerIndex;
     public boolean[] grid;
     private String[] messagePieces;
+    GameManagement gm;
 
     // Constructor to initialize socket, in and out streams
-    public Client(String ip, int port) {
+    public void setupClient(String ip, int port, GameManagement g) {
+        gm = g;
         try {
             socket = new Socket(ip, port);
-            out = new ObjectOutputStream(socket.getOutputStream());
+
+            if(!gm.isServer)
+                out = new ObjectOutputStream(socket.getOutputStream());
+
             in = new ObjectInputStream(socket.getInputStream());
             System.out.println("Connected to server.");
             try {
-                
+                run();
             } catch (Exception e) {
                 System.out.println("No messages remaining.");
+                e.printStackTrace();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,7 +48,7 @@ public class Client implements Runnable {
     }
 
     public void sendGuess(int guess, int playerNum) {
-        String msg = "Guess: " + guess + " from " + playerNum;
+        String msg = guess + " / " + playerNum;
         sendMessage(msg);
     }
 
@@ -53,6 +60,7 @@ public class Client implements Runnable {
             System.out.println("Message received from server: " + message);
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("error receiving message.");
+            e.printStackTrace();
         }
         return message;
     }
@@ -60,20 +68,22 @@ public class Client implements Runnable {
     // Function to handle incoming messages from the client
   public void run() {
     Object message = null;
-    try {
-        while ((message = in.readObject()) != null) {
+    System.out.println("waiting");
+        while ((message = receiveMessage()) != null) {
+            System.out.println("running");
             try {
                 messagePieces = (message.toString()).split(" / ");
+                System.out.println("p1: " + messagePieces[0]);   
+                System.out.println("p2: " + messagePieces[1]);              
             } catch (Exception e) {
                 // TODO: handle exception
-                System.out.println("Message didn't contain /. Message: " + message.toString());
+                System.out.println("Message didn't contain /. Message: " + message);
             }
-            String status = ((String) message).substring(0, 1);
+            String status = messagePieces[0];
             switch(status) {
                 //new match
                 case "2":   
-                    //TODO: start new match, set turn to player1, update initial arrays
-                    System.out.println("All machines should get a fresh gamegrid and update the scores and their initial arrays");
+                    gm.newRound(Integer.parseInt(messagePieces[1]));
                 break;
 
                 //game over
@@ -87,7 +97,8 @@ public class Client implements Runnable {
                     //set player value
                     try {
                         if(Integer.parseInt(messagePieces[1]) > 0 && Integer.parseInt(messagePieces[1]) <= 4) {
-                            playerIndex = Integer.parseInt(messagePieces[0]);
+                            gm.localPlayerNum = Integer.parseInt(messagePieces[1]);
+                            System.out.println("Set player number to: " + messagePieces[1]);
                         }
                     } catch (Exception e) {
                         System.out.println("The message was not an integer value: " + messagePieces[1] + " full message: " + message);
@@ -96,8 +107,9 @@ public class Client implements Runnable {
 
                 //match in progress
                 case "1":
-                    if(Integer.parseInt(messagePieces[2]) == playerIndex) {
+                    if(Integer.parseInt(messagePieces[1]) == gm.localPlayerNum) {
                         System.out.println("This machine should guess");
+                        gm.nextTurn();
                         //TODO: handle guess instructions in GameManagement
                         
                     } else {
@@ -115,11 +127,25 @@ public class Client implements Runnable {
                         }
                     }
                 break;
+
+                case "4":
+                    System.out.println("Recieved array");
+                    Scanner arrScan = new Scanner(messagePieces[1]);
+
+                    gm.gui.guessesMade.add(arrScan.nextInt());
+                    gm.gui.guessesMade.add(arrScan.nextInt());
+                    gm.gui.guessesMade.add(arrScan.nextInt());
+                    gm.gui.updateGuessesMade();
+                break;
+
+                case "5":
+                    gm.gui.updatePlayerCount(Integer.parseInt(messagePieces[1]));
+                break;
+
+                case "6":
+                System.out.println("If this works...");
             }
         }
-    } catch (IOException | ClassNotFoundException e) {
-        // no more messages to read.
-    }
   }
     
     // Function to close the socket connection
